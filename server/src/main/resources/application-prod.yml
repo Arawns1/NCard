@@ -6,6 +6,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
   datasource:
-    url: ${DATABASE_URL:jdbc:postgresql://localhost:5433/nekicard}
-    username: ${DATABASE_USERNAME:nekicard}
-    password: ${DATABASE_PASSWORD:neki123@}
+    url: jdbc:postgresql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: org.postgresql.Driver

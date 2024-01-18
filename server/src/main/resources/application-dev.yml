@@ -6,9 +6,12 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true
   datasource:
     url: jdbc:postgresql://localhost:5433/nekicard
     username: nekicard
     password: neki123@
+    driver-class-name: org.postgresql.Driver
 
 
