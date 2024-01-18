@@ -10,7 +10,7 @@ RUN mvn clean install
 
 FROM openjdk:17-jdk-slim
 
-ENV SPRING_PROFILES_ACTIVE=prod
+ENV APP_PROFILE=prod
 
 EXPOSE 8080
 
