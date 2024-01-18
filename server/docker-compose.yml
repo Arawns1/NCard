@@ -1,0 +1,28 @@
+version: '3.9'
+services:
+  db:
+    image: postgres
+    container_name: nekicard-postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: neki123@
+      POSTGRES_USER: nekicard
+      POSTGRES_DB: nekicard
+    volumes:
+      - postgres-volume:/var/lib/postgresql/data
+    ports:
+      - 5433:5432
+    networks:
+      - dev-network
+
+networks:
+  dev-network:
+    driver: bridge
+
+volumes:
+  postgres-volume:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: 'D:\Volumes Docker'
