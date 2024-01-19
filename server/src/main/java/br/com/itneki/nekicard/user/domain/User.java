@@ -96,5 +96,10 @@ public class User {
                 card.setStatus(false);
             }
         }
+        if (socialMediaList != null) {
+            for (SocialMedia socialMedia : socialMediaList) {
+                socialMedia.excluir();
+            }
+        }
     }
 }

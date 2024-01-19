@@ -1,12 +1,10 @@
 package br.com.itneki.nekicard.socialmedia.domain;
 
+import br.com.itneki.nekicard.socialmedia.dto.SaveSocialMediaDTO;
 import br.com.itneki.nekicard.user.domain.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -15,22 +13,40 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(of = "id")
 public class SocialMedia {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "SOCIAL_MEDIA_CD_ID")
+    @Column(name = "SOME_CD_ID")
     private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "USER_CD_ID")
-    private User user;
+    @Column(name = "SOME_BOOL_STATUS")
+    private boolean status;
 
-    @Column(name = "SOCIAL_MEDIA_TX_NAME")
+    @Column(name = "SOME_TX_NAME")
     @NotBlank(message = "O campo (nome) não pode ser nulo ou vazio")
     private String name;
 
-    @Column(name = "SOCIAL_MEDIA_TX_URL")
+    @Column(name = "SOME_TX_URL")
     @NotBlank(message = "O campo (url) não pode ser nulo ou vazio")
     private String url;
+
+    @ManyToOne
+    @JoinColumn(name = "FK_USER_SOME", insertable = false, updatable = false)
+    private User user;
+
+    @Column(name = "FK_USER_SOME")
+    private UUID userId;
+
+    public SocialMedia(SaveSocialMediaDTO dto, UUID userId){
+        this.status = true;
+        this.name = dto.name();
+        this.url = dto.url();
+        this.userId = userId;
+    }
+
+    public void excluir(){
+        this.setStatus(false);
+    }
 
 }

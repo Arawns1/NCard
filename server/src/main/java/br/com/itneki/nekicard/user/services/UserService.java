@@ -2,6 +2,8 @@ package br.com.itneki.nekicard.user.services;
 
 import br.com.itneki.nekicard.exceptions.UserFoundException;
 import br.com.itneki.nekicard.exceptions.UserNotFoundException;
+import br.com.itneki.nekicard.socialmedia.domain.SocialMedia;
+import br.com.itneki.nekicard.socialmedia.repository.SocialMediaRepository;
 import br.com.itneki.nekicard.user.domain.User;
 import br.com.itneki.nekicard.user.dto.SavedUserDTO;
 import br.com.itneki.nekicard.user.dto.SignUpUserDTO;
@@ -16,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -23,6 +26,8 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository userRepository;
+
+    private final SocialMediaRepository socialMediaRepository;
 
     public Page<User> findAll(Pageable paginacao){
         return userRepository.findAllByStatusTrue(paginacao);
@@ -38,6 +43,7 @@ public class UserService {
                       .ifPresent(userFound -> {
                           throw new UserFoundException();
                       });
+
         User user = User.builder()
                         .name(signUpUserDTO.nome())
                         .email(signUpUserDTO.email())
@@ -51,6 +57,15 @@ public class UserService {
     public User update(UUID id, UpdateUserDTO updateUserDTO){
         var userFound = userRepository.findById(id)
                       .orElseThrow(UserNotFoundException::new);
+
+        if(!updateUserDTO.mediaSocialList().isEmpty()){
+
+            var socialMediaList = updateUserDTO.mediaSocialList()
+                                               .stream()
+                                               .map(socialMediaDTO -> new SocialMedia(socialMediaDTO, id))
+                                               .toList();
+            socialMediaRepository.saveAll(socialMediaList);
+        }
 
         userFound.setSocialName(updateUserDTO.socialName());
         userFound.setLocality(updateUserDTO.locality());
