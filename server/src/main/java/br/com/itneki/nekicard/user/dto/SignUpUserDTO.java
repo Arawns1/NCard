@@ -24,7 +24,7 @@ public class SignUpUserDTO{
             requiredMode = Schema.RequiredMode.REQUIRED)
     @Email(message = "O campo (email) deve conter um e-mail válido")
     @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@(neki-it\\.com\\.br|neki\\.com\\.br)$",
-            message = "Formato de e-mail inválido")
+            message = "Formato de e-mail inválido. O email deve ser do domínio neki-it.com.br ou neki.com.br")
     private String email;
 
     @Schema(example = "user",

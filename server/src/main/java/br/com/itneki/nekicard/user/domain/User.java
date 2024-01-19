@@ -41,7 +41,8 @@ public class User {
 
     @Column(name = "USER_TX_EMAIL", unique = true)
     @Email(message = "O campo (email) deve conter um e-mail válido")
-    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@(neki-it\\.com\\.br|neki\\.com\\.br)$", message = "Formato de e-mail inválido")
+    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@(neki-it\\.com\\.br|neki\\.com\\.br)$",
+             message = "Formato de e-mail inválido. O email deve ser do domínio neki-it.com.br ou neki.com.br")
     private String email;
 
     @Column(name = "USER_TX_PASSWORD")
