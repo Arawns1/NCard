@@ -13,7 +13,7 @@ public class SwaggerConfig {
         return new OpenAPI()
                 .info(new Info().title("NekiCard API Documentation")
                                 .description("Official documentation of NekiCard API Aplication")
-                                .version("1.0.0")
+                                .version("0.0.2")
                                 .contact(new Contact()
                                                 .email("gabrieldamico22@gmail.com")
                                                 .name("Gabriel Damico")
