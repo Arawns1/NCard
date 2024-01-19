@@ -19,8 +19,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class UserPhoto {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "USPH_CD_ID")
+    @Column(name = "USER_CD_ID")
     private UUID id;
 
     @Lob
@@ -35,17 +34,10 @@ public class UserPhoto {
     @Column(name = "USPH_TX_SIZE")
     private Long size;
 
+
     @OneToOne
+    @MapsId
     @JoinColumn(name = "USER_CD_ID", nullable = true, insertable = false, updatable = false)
     private User user;
 
-    @Column(name = "USER_CD_ID")
-    private UUID userId;
-
-    public UserPhoto(byte[] bytes, String contentType, long size, UUID id) {
-        this.photo = bytes;
-        this.size = size;
-        this.type = contentType;
-        this.userId = id;
-    }
 }
