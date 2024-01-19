@@ -38,12 +38,12 @@ public class SocialMediaService {
                                                  repository.save(newSocialMedia);});
     }
 
-    public void deleteSocialMedia(UUID id) {
+    public void deleteSocialMedia(UUID userId,SocialMediaNames socialMediaName) {
         repository
-                .findById(id)
-                .ifPresentOrElse((socialMedia) -> repository.deleteById(id),
+                .findByNameAndUserId(socialMediaName, userId)
+                .ifPresentOrElse(socialMedia -> repository.deleteById(socialMedia.getId()),
                                  () -> {
-                                     throw new NoSuchElementException("Social media with id: " + id + " not found");
+                                     throw new NoSuchElementException("Social media with user id: " + userId + " not found");
                                  });
     }
 }

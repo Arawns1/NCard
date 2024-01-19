@@ -1,17 +1,18 @@
 package br.com.itneki.nekicard.socialmedia.controller;
 
+import br.com.itneki.nekicard.socialmedia.domain.SocialMediaNames;
 import br.com.itneki.nekicard.socialmedia.service.SocialMediaService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.Enumerated;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 @RequestMapping("/socialmedia")
@@ -28,11 +29,15 @@ public class SocialMediaController {
             @ApiResponse(responseCode = "204"),
             @ApiResponse(responseCode = "400"),
     })
-    @DeleteMapping("/{id}")
+
+    @DeleteMapping("/{userId}")
     @Transactional
-    public ResponseEntity<Object> delete(@PathVariable("id") UUID id ){
+    public ResponseEntity<Object> delete( @PathVariable("userId") UUID userId,
+                                         @Parameter(description = "Social Media Name",
+                                                    schema = @Schema(implementation = SocialMediaNames.class))
+                                         @RequestParam("socialMediaName") SocialMediaNames socialMediaName ){
         try{
-            service.deleteSocialMedia(id);
+            service.deleteSocialMedia(userId, socialMediaName);
             return ResponseEntity.noContent().build();
         }
         catch(Exception e){

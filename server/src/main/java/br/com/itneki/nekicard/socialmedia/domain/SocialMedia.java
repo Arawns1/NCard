@@ -23,7 +23,8 @@ public class SocialMedia {
     private UUID id;
 
     @Column(name = "SOME_BOOL_STATUS")
-    private boolean status;
+    @Builder.Default
+    private boolean status = true;
 
     @Column(name = "SOME_TX_NAME")
     @Enumerated(EnumType.STRING)
@@ -42,6 +43,7 @@ public class SocialMedia {
     private UUID userId;
 
     public SocialMedia(SaveSocialMediaDTO dto, UUID userId){
+        this.status = true;
         this.name = SocialMediaNames.valueOf(dto.name().toUpperCase());
         this.url = dto.url();
         this.userId = userId;
