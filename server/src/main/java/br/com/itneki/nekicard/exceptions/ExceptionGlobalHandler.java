@@ -1,18 +1,20 @@
 package br.com.itneki.nekicard.exceptions;
 
 import org.springframework.context.MessageSource;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ProblemDetail;
 import org.springframework.lang.Nullable;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.context.request.WebRequest;
 @RestControllerAdvice
 public class ExceptionGlobalHandler extends ResponseEntityExceptionHandler {
+
+
+
 
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, @Nullable Object body,
