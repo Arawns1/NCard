@@ -2,6 +2,7 @@ package br.com.itneki.nekicard.user.domain;
 
 import br.com.itneki.nekicard.card.domain.Card;
 import br.com.itneki.nekicard.socialmedia.domain.SocialMedia;
+import br.com.itneki.nekicard.user.dto.UpdateUserDTO;
 import br.com.itneki.nekicard.user_photo.domain.UserPhoto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
@@ -89,6 +90,16 @@ public class User {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    public User updateInfos(UpdateUserDTO dto){
+        this.socialName = dto.socialName();
+        this.locality = dto.locality();
+        this.description = dto.description();
+        this.phone = dto.phone();
+        this.workTime = dto.worktime();
+        this.workFunction = dto.workFunction();
+        return this;
+    }
+
     public void excluir(){
         this.status = false;
         if (cardList != null) {
@@ -102,4 +113,5 @@ public class User {
             }
         }
     }
+
 }
