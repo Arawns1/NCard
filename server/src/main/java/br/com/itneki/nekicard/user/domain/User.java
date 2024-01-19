@@ -5,6 +5,7 @@ import br.com.itneki.nekicard.socialmedia.domain.SocialMedia;
 import br.com.itneki.nekicard.user.dto.UpdateUserDTO;
 import br.com.itneki.nekicard.user_photo.domain.UserPhoto;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -40,7 +41,8 @@ public class User {
 
     @Column(name = "USER_TX_EMAIL", unique = true)
     @Email(message = "O campo (email) deve conter um e-mail válido")
-    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@(neki-it\\.com\\.br|neki\\.com\\.br)$", message = "Formato de e-mail inválido")
+    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@(neki-it\\.com\\.br|neki\\.com\\.br)$",
+             message = "Formato de e-mail inválido. O email deve ser do domínio neki-it.com.br ou neki.com.br")
     private String email;
 
     @Column(name = "USER_TX_PASSWORD")
@@ -78,8 +80,14 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SocialMedia> socialMediaList;
 
-    @OneToOne(mappedBy = "user")
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @PrimaryKeyJoinColumn
+    @JsonIgnore
     private UserPhoto userPhoto;
+
+    @Column(name = "USER_TX_PROFILE_PHOTO_URL", nullable = true)
+    private String profilePhotoUrl;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Card> cardList;

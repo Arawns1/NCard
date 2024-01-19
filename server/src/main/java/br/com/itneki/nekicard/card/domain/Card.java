@@ -1,8 +1,11 @@
 package br.com.itneki.nekicard.card.domain;
 
+import br.com.itneki.nekicard.socialmedia.domain.SocialMedia;
 import br.com.itneki.nekicard.user.domain.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,15 +26,17 @@ public class Card {
     private UUID id;
 
     @Column(name = "CARD_BOOL_STATUS")
-    private boolean status;
+    @Builder.Default
+    private boolean status = true;
 
-    @Column(name = "CARD_CD_NFC_ID")
+    @Column(name = "CARD_CD_NFC_ID", unique = true)
     @NotBlank(message = "O campo (nfc_id) não pode ser nulo ou vazio")
-    private UUID nfcId;
+    @Pattern(regexp = "^[0-9A-Fa-f]{2}:[0-9A-Fa-f]{2}:[0-9A-Fa-f]{2}:[0-9A-Fa-f]{2}$",
+            message = "Insira um NFC ID válido")
+    private String nfcId;
 
     @Column(name = "CARD_TX_TYPE")
     @Enumerated(EnumType.STRING)
-    @NotBlank(message = "O campo (tipo) não pode ser nulo ou vazio")
     private CardType type;
 
     @Column(name = "CARD_TX_QRCODE_URL")
@@ -40,6 +45,10 @@ public class Card {
 
     @ManyToOne
     @JoinColumn(name = "USER_CD_ID")
+    @JsonIgnore
     private User user;
 
+    public void excluir(){
+        this.status = false;
+    }
 }

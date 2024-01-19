@@ -71,37 +71,4 @@ public class UserService {
         result.excluir();
     }
 
-//    public SavedUserDTO signupUser(String userJson, MultipartFile profilePhoto) throws IOException {
-//        User user = convertUserFromString(userJson);
-//        UserPhoto userPhoto = UserPhoto.builder()
-//                                       .photo(profilePhoto.getBytes())
-//                                       .size(profilePhoto.getSize())
-//                                       .type(profilePhoto.getContentType())
-//                                       .build();
-//        user.setUserPhoto(userPhoto);
-//
-//        var savedUser = userRepository.save(user);
-//
-//        URI uri = ServletUriComponentsBuilder
-//                .fromCurrentContextPath()
-//                .path("/image/{id}")
-//                .buildAndExpand(savedUser.getId())
-//                .toUri();
-//
-//        return new SavedUserDTO(savedUser.getEmail(), savedUser.getName(), savedUser.getBirthdate(), uri.toString());
-//    }
-
-    private User convertUserFromString(String userJson) {
-        User user;
-        try {
-            ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-                    false);
-            objectMapper.registerModule(new JavaTimeModule());
-            user = objectMapper.readValue(userJson, User.class);
-        } catch (IOException err) {
-            throw new ConversionException("Error! Failed to convert to User Class. Caused by: "+ err.getCause());
-        }
-        return user;
-    }
-
 }

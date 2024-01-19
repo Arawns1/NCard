@@ -8,10 +8,10 @@ import java.util.UUID;
 public record SavedUserDTO(UUID id,
                            String nome,
                            String email,
-                           LocalDate dataNascimento,
-                           String foto_url) {
+                           LocalDate dataNascimento
+                           ) {
 
     public SavedUserDTO(User user){
-        this(user.getId(), user.getName(), user.getEmail(),user.getBirthdate(), null);
+        this(user.getId(), user.getName(), user.getEmail(),user.getBirthdate());
     }
 }

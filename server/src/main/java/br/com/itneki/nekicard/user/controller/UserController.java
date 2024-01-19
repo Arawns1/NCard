@@ -1,10 +1,12 @@
 package br.com.itneki.nekicard.user.controller;
 
+import br.com.itneki.nekicard.socialmedia.domain.SocialMediaNames;
 import br.com.itneki.nekicard.user.domain.User;
 import br.com.itneki.nekicard.user.dto.SignUpUserDTO;
 import br.com.itneki.nekicard.user.dto.UpdateUserDTO;
 import br.com.itneki.nekicard.user.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,7 +17,9 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +46,12 @@ public class UserController {
             }),
             @ApiResponse(responseCode = "400", description = "Usuário já existe")
     })
-    public ResponseEntity<Page<User>> findAll(@PageableDefault(size = 10, sort = "name") Pageable pagination){
+    public ResponseEntity<Page<User>> findAll(@RequestParam(name = "page", defaultValue = "0") Integer page,
+                                              @RequestParam(name = "size", defaultValue = "10") Integer size,
+                                              @RequestParam(name = "sort", defaultValue = "name") String sort,
+                                              @Parameter(description = "Page Ordenation",schema = @Schema(implementation = Sort.Direction.class))
+                                              @RequestParam(name = "direction", defaultValue = "ASC") Sort.Direction direction){
+        var pagination = PageRequest.of(page, size, direction, sort);
         var result = userService.findAll(pagination);
         return ResponseEntity.ok().body(result);
     }
