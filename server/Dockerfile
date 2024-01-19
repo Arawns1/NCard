@@ -1,19 +1,29 @@
-FROM ubuntu:latest AS build
-
-RUN apt-get update
-RUN apt-get install openjdk-17-jdk -y
+FROM maven:3.8.1-openjdk-17-slim AS build
 
 COPY . .
 
-RUN apt-get install maven -y
+
+ARG APP_PROFILE
+ARG DATABASE_HOST
+ARG DATABASE_PORT
+ARG DATABASE_NAME
+ARG DATABASE_USERNAME
+ARG DATABASE_PASSWORD
+
+ENV APP_PROFILE=$APP_PROFILE
+ENV DATABASE_HOST=$DATABASE_HOST
+ENV DATABASE_PORT=$DATABASE_PORT
+ENV DATABASE_NAME=$DATABASE_NAME
+ENV DATABASE_USERNAME=$DATABASE_USERNAME
+ENV DATABASE_PASSWORD=$DATABASE_PASSWORD
+
 RUN mvn clean install
 
 FROM openjdk:17-jdk-slim
 
-ENV APP_PROFILE=prod
-
 EXPOSE 8080
 
 COPY --from=build /target/nekicard-api.jar app.jar
+
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
