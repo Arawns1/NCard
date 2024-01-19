@@ -5,7 +5,7 @@ import br.com.itneki.nekicard.exceptions.UserNotFoundException;
 import br.com.itneki.nekicard.user.domain.User;
 import br.com.itneki.nekicard.user.dto.SavedUserDTO;
 import br.com.itneki.nekicard.user.dto.SignUpUserDTO;
-import br.com.itneki.nekicard.user.dto.UserUpdateDTO;
+import br.com.itneki.nekicard.user.dto.UpdateUserDTO;
 import br.com.itneki.nekicard.user.repository.UserRepository;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -48,16 +48,16 @@ public class UserService {
         return new SavedUserDTO(savedUser);
     }
 
-    public User update(UUID id, UserUpdateDTO userUpdateDTO){
+    public User update(UUID id, UpdateUserDTO updateUserDTO){
         var userFound = userRepository.findById(id)
                       .orElseThrow(UserNotFoundException::new);
 
-        userFound.setSocialName(userUpdateDTO.socialName());
-        userFound.setLocality(userUpdateDTO.locality());
-        userFound.setDescription(userUpdateDTO.description());
-        userFound.setPhone(userUpdateDTO.phone());
-        userFound.setWorkTime(userUpdateDTO.worktime());
-        userFound.setWorkFunction(userUpdateDTO.workFunction());
+        userFound.setSocialName(updateUserDTO.socialName());
+        userFound.setLocality(updateUserDTO.locality());
+        userFound.setDescription(updateUserDTO.description());
+        userFound.setPhone(updateUserDTO.phone());
+        userFound.setWorkTime(updateUserDTO.worktime());
+        userFound.setWorkFunction(updateUserDTO.workFunction());
 
         return userRepository.save(userFound);
     }

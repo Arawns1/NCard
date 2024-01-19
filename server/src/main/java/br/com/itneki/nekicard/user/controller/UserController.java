@@ -2,10 +2,11 @@ package br.com.itneki.nekicard.user.controller;
 
 import br.com.itneki.nekicard.user.domain.User;
 import br.com.itneki.nekicard.user.dto.SignUpUserDTO;
-import br.com.itneki.nekicard.user.dto.UserUpdateDTO;
+import br.com.itneki.nekicard.user.dto.UpdateUserDTO;
 import br.com.itneki.nekicard.user.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -78,7 +79,7 @@ public class UserController {
     })
     @PutMapping("/{id}")
     @Transactional
-    public ResponseEntity<Object> update(@PathVariable UUID id, @RequestBody UserUpdateDTO user){
+    public ResponseEntity<Object> update(@PathVariable UUID id, @RequestBody UpdateUserDTO user){
         try{
             return ResponseEntity.ok().body(userService.update(id,user));
         }
@@ -119,7 +120,8 @@ public class UserController {
             description = "Essa função é responsável realizar a exclusão lógica do usuário"
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "204")
+            @ApiResponse(responseCode = "204"),
+            @ApiResponse(responseCode = "400"),
     })
     @DeleteMapping("/{id}")
     @Transactional

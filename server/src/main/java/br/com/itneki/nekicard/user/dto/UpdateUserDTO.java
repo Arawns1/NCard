@@ -1,13 +1,12 @@
 package br.com.itneki.nekicard.user.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.PastOrPresent;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
-public record UserUpdateDTO(@Schema(example = "Petrópolis, RJ",
+public record UpdateUserDTO(@Schema(example = "Petrópolis, RJ",
                             requiredMode = Schema.RequiredMode.NOT_REQUIRED)
                             String locality,
                             @Schema(example = "Desenvolvedor Júnior em constante aprendizado",
