@@ -92,6 +92,10 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Card> cardList;
 
+    @Column(name = "USER_TX_ROLE")
+    @Enumerated(EnumType.STRING)
+    private UserRole userRole;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 

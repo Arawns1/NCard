@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -22,7 +23,8 @@ import java.util.UUID;
 @RequestMapping("/card")
 @RestController
 @RequiredArgsConstructor
-@Tag(name="Cartão", description = "Informações e geração de cartões")
+@SecurityRequirement(name = "jwt_auth")
+@Tag(name="3.Cartão", description = "Informações e geração de cartões")
 public class CardController {
 
     private final CardService cardService;

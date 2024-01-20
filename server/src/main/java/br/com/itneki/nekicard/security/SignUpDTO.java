@@ -1,6 +1,5 @@
-package br.com.itneki.nekicard.user.dto;
+package br.com.itneki.nekicard.security;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -13,12 +12,11 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class SignUpUserDTO{
+public class SignUpDTO {
 
     @Schema(example = "user@neki-it.com.br",
             requiredMode = Schema.RequiredMode.REQUIRED)

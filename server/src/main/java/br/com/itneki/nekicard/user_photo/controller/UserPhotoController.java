@@ -4,6 +4,7 @@ import br.com.itneki.nekicard.user_photo.domain.UserPhoto;
 import br.com.itneki.nekicard.user_photo.dto.UserPhotoDTO;
 import br.com.itneki.nekicard.user_photo.services.UserPhotoService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,8 @@ import java.util.UUID;
 @RequestMapping("/image")
 @RestController
 @RequiredArgsConstructor
-@Tag(name="Foto do Usuário", description = "Endpoints da foto do usuário")
+@SecurityRequirement(name = "jwt_auth")
+@Tag(name="2.1.Foto do Usuário", description = "Endpoints da foto do usuário")
 public class UserPhotoController {
 
     private final UserPhotoService userPhotoService;

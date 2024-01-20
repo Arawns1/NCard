@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.Enumerated;
 import jakarta.transaction.Transactional;
@@ -18,7 +19,8 @@ import java.util.UUID;
 @RequestMapping("/socialmedia")
 @RestController
 @RequiredArgsConstructor
-@Tag(name="Usuário")
+@SecurityRequirement(name = "jwt_auth")
+@Tag(name="2.Usuário")
 public class SocialMediaController {
 
     private final SocialMediaService service;
