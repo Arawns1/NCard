@@ -35,37 +35,27 @@ public class User {
     @Builder.Default
     private boolean status = true;
 
-    @Column(name = "USER_TX_NAME")
-    @NotBlank(message = "O campo (nome) não pode ser nulo ou vazio")
+    @Column(name = "USER_TX_NAME", nullable = false)
     private String name;
 
-    @Column(name = "USER_TX_EMAIL", unique = true)
-    @Email(message = "O campo (email) deve conter um e-mail válido")
-    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@(neki-it\\.com\\.br|neki\\.com\\.br)$",
-             message = "Formato de e-mail inválido. O email deve ser do domínio neki-it.com.br ou neki.com.br")
+    @Column(name = "USER_TX_EMAIL", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "USER_TX_PASSWORD")
-    @Length(min = 8, max = 100, message = "A senha deve conter entre 8 e 100 caracteres")
+    @Column(name = "USER_TX_PASSWORD", nullable = false, length = 200)
     private String password;
 
-    @Column(name = "USER_DT_BIRTHDATE")
-    @Past(message = "O campo (data de nascimento) não pode estar no presente ou futuro")
+    @Column(name = "USER_DT_BIRTHDATE", nullable = true)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate birthdate;
 
     @Column(name = "USER_TX_LOCALITY", nullable = true)
     private String locality;
 
-    @Column(name = "USER_TX_DESCRIPTION", nullable = true)
-    @Length(max = 120, message = "O campo (descrição) deve conter no máximo 120 caracteres")
+    @Column(name = "USER_TX_DESCRIPTION", nullable = true, length = 120)
     private String description;
 
-    @Column(name = "USER_TX_WORKTIME")
-    @PastOrPresent(message = "O campo (tempo de Neki) não pode estar no futuro")
+    @Column(name = "USER_TX_WORKTIME", nullable = true)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate workTime;
 
     @Column(name = "USER_TX_WORKFUNCTION", nullable = true)
