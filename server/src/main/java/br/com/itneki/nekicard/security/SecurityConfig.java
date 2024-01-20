@@ -27,7 +27,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers(PERMIT_ALL_LIST).permitAll()
                     .requestMatchers(HttpMethod.GET,"/user","/user/findAll").authenticated()
-                    .requestMatchers(HttpMethod.GET,"/user/{id}").permitAll()
+                    .requestMatchers(HttpMethod.GET,"/user/{id}", "/image/**").permitAll()
                     .anyRequest().authenticated()
 
                    )
