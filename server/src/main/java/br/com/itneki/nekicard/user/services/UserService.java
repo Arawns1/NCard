@@ -23,8 +23,9 @@ public class UserService {
 
     private final ModelMapper modelMapper;
 
-    public Page<User> findAll(Pageable paginacao) {
-        return userRepository.findAllByStatusTrue(paginacao);
+    public Page<UserDetailsDTO> findAll(Pageable paginacao) {
+        Page<User> usersPage = userRepository.findAllByStatusTrue(paginacao);
+        return usersPage.map(user -> modelMapper.map(user, UserDetailsDTO.class));
     }
 
     public UserDetailsDTO findById(UUID id) {

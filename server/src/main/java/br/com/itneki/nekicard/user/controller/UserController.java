@@ -49,7 +49,7 @@ public class UserController {
             }),
             @ApiResponse(responseCode = "400", description = "Usuário já existe")
     })
-    public ResponseEntity<Page<User>> findAll(@RequestParam(name = "page", defaultValue = "0") Integer page,
+    public ResponseEntity<Page<UserDetailsDTO>> findAll(@RequestParam(name = "page", defaultValue = "0") Integer page,
                                               @RequestParam(name = "size", defaultValue = "10") Integer size,
                                               @RequestParam(name = "sort", defaultValue = "name") String sort,
                                               @Parameter(description = "Page Ordenation",schema = @Schema(implementation = Sort.Direction.class))
