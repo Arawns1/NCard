@@ -5,6 +5,7 @@ import br.com.itneki.nekicard.security.SignInDTO;
 import br.com.itneki.nekicard.user.domain.User;
 import br.com.itneki.nekicard.security.SignUpDTO;
 import br.com.itneki.nekicard.user.dto.UpdateUserDTO;
+import br.com.itneki.nekicard.user.dto.UserDetailsDTO;
 import br.com.itneki.nekicard.user.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -66,7 +67,7 @@ public class UserController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {
                     @Content(
-                            schema = @Schema(implementation = User.class)
+                            schema = @Schema(implementation = UserDetailsDTO.class)
                     )
             }),
     })
@@ -88,7 +89,7 @@ public class UserController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {
                     @Content(
-                            schema = @Schema(implementation = User.class)
+                            schema = @Schema(implementation = UserDetailsDTO.class)
                     )
             }),
     })
