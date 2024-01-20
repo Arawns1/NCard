@@ -4,7 +4,9 @@ import br.com.itneki.nekicard.user_photo.domain.UserPhoto;
 import br.com.itneki.nekicard.user_photo.dto.UserPhotoDTO;
 import br.com.itneki.nekicard.user_photo.services.UserPhotoService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -21,7 +23,8 @@ import java.util.UUID;
 @RequestMapping("/image")
 @RestController
 @RequiredArgsConstructor
-@Tag(name="Foto do Usuário", description = "Endpoints da foto do usuário")
+@SecurityRequirement(name = "jwt_auth")
+@Tag(name="2.1.Foto do Usuário", description = "Endpoints da foto do usuário")
 public class UserPhotoController {
 
     private final UserPhotoService userPhotoService;
@@ -40,12 +43,13 @@ public class UserPhotoController {
         }
     }
 
-    @PostMapping(path = "/{userId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    @Operation(summary = "Salvar imagem do usuário", description = "Endpoint responsável por salvar imagem do Usuário")
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @Operation(summary = "Salvar imagem do usuário logado", description = "Endpoint responsável por salvar imagem do Usuário logado")
     @Transactional
-    public ResponseEntity<Object> saveImage(@PathVariable UUID userId, @RequestPart("image") MultipartFile profilePhoto, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<Object> saveImage(@RequestPart("image") MultipartFile profilePhoto, UriComponentsBuilder uriBuilder, HttpServletRequest request ) {
+        var userId = request.getAttribute("user_id").toString();
         try {
-            var result = userPhotoService.save(userId, profilePhoto);
+            var result = userPhotoService.save(UUID.fromString(userId), profilePhoto);
             var uri = uriBuilder.path("/image/{id}")
                                 .buildAndExpand(result.getId())
                                 .toUri();

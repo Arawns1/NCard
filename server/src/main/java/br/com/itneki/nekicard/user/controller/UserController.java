@@ -1,40 +1,43 @@
 package br.com.itneki.nekicard.user.controller;
 
-import br.com.itneki.nekicard.socialmedia.domain.SocialMediaNames;
+import br.com.itneki.nekicard.security.AuthResponse;
+import br.com.itneki.nekicard.security.SignInDTO;
 import br.com.itneki.nekicard.user.domain.User;
-import br.com.itneki.nekicard.user.dto.SignUpUserDTO;
+import br.com.itneki.nekicard.security.SignUpDTO;
 import br.com.itneki.nekicard.user.dto.UpdateUserDTO;
+import br.com.itneki.nekicard.user.dto.UserDetailsDTO;
 import br.com.itneki.nekicard.user.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.UUID;
 
 @RequestMapping("/user")
 @RestController
 @RequiredArgsConstructor
-@Tag(name="Usuário", description = "Informações do usuário")
+
+@Tag(name="2.Usuário", description = "Informações do usuário")
 public class UserController {
 
     private final UserService userService;
-    @GetMapping
+    @GetMapping("/findAll")
+    @SecurityRequirement(name = "jwt_auth")
     @Operation(summary = "Listagem de todos os usuários",
             description = "Essa função é responsável por listar todos os usuários"
     )
@@ -46,7 +49,7 @@ public class UserController {
             }),
             @ApiResponse(responseCode = "400", description = "Usuário já existe")
     })
-    public ResponseEntity<Page<User>> findAll(@RequestParam(name = "page", defaultValue = "0") Integer page,
+    public ResponseEntity<Page<UserDetailsDTO>> findAll(@RequestParam(name = "page", defaultValue = "0") Integer page,
                                               @RequestParam(name = "size", defaultValue = "10") Integer size,
                                               @RequestParam(name = "sort", defaultValue = "name") String sort,
                                               @Parameter(description = "Page Ordenation",schema = @Schema(implementation = Sort.Direction.class))
@@ -56,6 +59,29 @@ public class UserController {
         return ResponseEntity.ok().body(result);
     }
 
+    @GetMapping
+    @SecurityRequirement(name = "jwt_auth")
+    @Operation(summary = "Encontra o perfil do usuário logado",
+            description = "Essa função é responsável por retonar as informações do perfil logado"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {
+                    @Content(
+                            schema = @Schema(implementation = UserDetailsDTO.class)
+                    )
+            }),
+    })
+    public ResponseEntity<Object> findById(HttpServletRequest request){
+        var userId = request.getAttribute("user_id").toString();
+        try{
+            return ResponseEntity.ok().body(userService.findById(UUID.fromString(userId)));
+        }
+        catch(Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+
     @GetMapping("/{id}")
     @Operation(summary = "Encontra o usuário pelo ID",
             description = "Essa função é responsável por encontrar o usuário com base no Id"
@@ -63,19 +89,20 @@ public class UserController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {
                     @Content(
-                            schema = @Schema(implementation = User.class)
+                            schema = @Schema(implementation = UserDetailsDTO.class)
                     )
             }),
     })
-    public ResponseEntity<Object> findById(@PathVariable UUID id){
+    public ResponseEntity<Object> findById(@RequestParam("id") UUID userId){
         try{
-            return ResponseEntity.ok().body(userService.findById(id));
+            return ResponseEntity.ok().body(userService.findById(userId));
         }
         catch(Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
+    @SecurityRequirement(name = "jwt_auth")
     @Operation(summary = "Atualiza o usuário com base no ID",
             description = "Essa função é responsável por atualizar informações do usuário com base no Id"
     )
@@ -96,35 +123,7 @@ public class UserController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
-
-    @PostMapping
-    @Operation(summary = "Cadastro de novo usuário",
-            description = "Essa função é responsável por cadastrar um novo usuário"
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", content = {
-                    @Content(
-                            schema = @Schema(implementation = SignUpUserDTO.class)
-                    )
-            })
-    })
-    @Transactional
-    public ResponseEntity<Object> save(@RequestBody @Valid SignUpUserDTO user, UriComponentsBuilder uriBuilder){
-        try{
-            var result = userService.save(user);
-
-            var uri = uriBuilder.path("/user/{id}")
-                                .buildAndExpand(result.id())
-                                .toUri();
-
-            return ResponseEntity.created(uri).body(result);
-
-        }
-        catch(Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
+    @SecurityRequirement(name = "jwt_auth")
     @Operation(summary = "Exclusão lógica do usuário",
             description = "Essa função é responsável realizar a exclusão lógica do usuário"
     )

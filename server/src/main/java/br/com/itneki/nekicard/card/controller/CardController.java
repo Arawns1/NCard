@@ -9,7 +9,9 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +24,8 @@ import java.util.UUID;
 @RequestMapping("/card")
 @RestController
 @RequiredArgsConstructor
-@Tag(name="Cartão", description = "Informações e geração de cartões")
+@SecurityRequirement(name = "jwt_auth")
+@Tag(name="3.Cartão", description = "Informações e geração de cartões")
 public class CardController {
 
     private final CardService cardService;
@@ -48,7 +51,7 @@ public class CardController {
     }
 
     @Operation(summary = "Salva um novo cartão",
-            description = "Essa função é responsável salvar um novo cartão e vinculá-lo ao usuário"
+            description = "Essa função é responsável salvar um novo cartão e vinculá-lo ao usuário logado"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {
@@ -57,13 +60,15 @@ public class CardController {
                     )
             }),
     })
-    @PostMapping("/{userId}")
+    @PostMapping
     @Transactional
-    public ResponseEntity<Object> save(@PathVariable UUID userId,
+    public ResponseEntity<Object> save(HttpServletRequest request,
                                        @RequestBody @Valid SaveCardDTO saveCardDTO,
                                        UriComponentsBuilder uriBuilder){
+
+        var userId = request.getAttribute("user_id").toString();
         try{
-            var result = cardService.save(saveCardDTO, userId);
+            var result = cardService.save(saveCardDTO, UUID.fromString(userId));
 
             var uri = uriBuilder.path("/user/{id}")
                                 .buildAndExpand(result.getId())
