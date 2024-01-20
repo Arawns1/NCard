@@ -3,8 +3,7 @@
     "name": "nekicard",
     "slug": "nekicard",
     "version": "1.0.0",
-    "assetBundlePatterns": [
-      "**/*"
-    ]
+    "userInterfaceStyle": "dark",
+    "assetBundlePatterns": ["**/*"]
   }
 }
