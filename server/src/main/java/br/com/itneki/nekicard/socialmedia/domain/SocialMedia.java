@@ -3,6 +3,7 @@ package br.com.itneki.nekicard.socialmedia.domain;
 import br.com.itneki.nekicard.socialmedia.dto.SaveSocialMediaDTO;
 import br.com.itneki.nekicard.user.domain.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -26,12 +27,11 @@ public class SocialMedia {
     @Builder.Default
     private boolean status = true;
 
-    @Column(name = "SOME_TX_NAME")
+    @Column(name = "SOME_TX_NAME", nullable = false)
     @Enumerated(EnumType.STRING)
     private SocialMediaNames name;
 
-    @Column(name = "SOME_TX_URL")
-    @NotBlank(message = "O campo (url) não pode ser nulo ou vazio")
+    @Column(name = "SOME_TX_URL", nullable = false)
     private String url;
 
     @ManyToOne
@@ -39,7 +39,8 @@ public class SocialMedia {
     @JsonIgnore
     private User user;
 
-    @Column(name = "FK_USER_SOME")
+    @Column(name = "FK_USER_SOME", unique = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private UUID userId;
 
     public SocialMedia(SaveSocialMediaDTO dto, UUID userId){
