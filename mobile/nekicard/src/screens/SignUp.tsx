@@ -2,24 +2,16 @@ import Button from '@components/Button'
 import { Input } from '@components/Input'
 import { AntDesign, Fontisto } from '@expo/vector-icons'
 import { yupResolver } from '@hookform/resolvers/yup'
-import {
-  Box,
-  Checkbox,
-  HStack,
-  Heading,
-  Icon,
-  Text,
-  Toast,
-  VStack,
-} from 'native-base'
-import React from 'react'
+import { Box, Checkbox, HStack, Icon, Text, Toast, VStack } from 'native-base'
+import React, { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import * as Yup from 'yup'
 import { LinearGradient } from 'expo-linear-gradient'
 import { Link } from '@react-navigation/native'
 import { useAuth } from '@hooks/useAuth'
-import { api } from '@services/axios'
 import { Title } from '@components/Title'
+import { FontAwesome5 } from '@expo/vector-icons'
+import { SignUpRequestDTO } from '@dtos/SignUpRequest'
 
 const SignUpSchema = Yup.object({
   name: Yup.string().required('Nome é obrigatório'),
@@ -30,6 +22,7 @@ const SignUpSchema = Yup.object({
       'E-mail deve terminar com "@neki-it.com.br" ou "@neki.com.br"'
     ),
   password: Yup.string().required('Senha é obrigatória'),
+  birthDate: Yup.string().required('Data de nascimento é obrigatória'),
 })
 
 export default function SignUp() {
@@ -41,8 +34,8 @@ export default function SignUp() {
   } = useForm<SignUpRequestDTO>({
     resolver: yupResolver(SignUpSchema),
     defaultValues: {
-      email: '',
       name: '',
+      email: '',
       password: '',
       birthDate: '',
     },
@@ -97,6 +90,22 @@ export default function SignUp() {
           <VStack id="inputs" space={'2'}>
             <Controller
               control={control}
+              name="name"
+              render={({ field: { onChange, value } }) => (
+                <Input
+                  placeholder="Nome Completo"
+                  textContentType="name"
+                  autoCapitalize="none"
+                  onChangeText={onChange}
+                  value={value}
+                  leftIcon={<Icon as={FontAwesome5} name="user-circle" />}
+                  errorMessage={errors.name?.message}
+                />
+              )}
+            />
+
+            <Controller
+              control={control}
               name="email"
               render={({ field: { onChange, value } }) => (
                 <Input
@@ -111,6 +120,21 @@ export default function SignUp() {
                 />
               )}
             />
+
+            <Controller
+              control={control}
+              name="birthDate"
+              render={({ field: { onChange, value } }) => (
+                <Input
+                  variant="date"
+                  placeholder="Data de nascimento"
+                  onChange={onChange}
+                  leftIcon={<Icon as={AntDesign} name="calendar" />}
+                  errorMessage={errors.birthDate?.message}
+                />
+              )}
+            />
+
             <Controller
               control={control}
               name="password"
