@@ -28,16 +28,16 @@ public class SignUpDTO {
     @Schema(example = "user",
             requiredMode = Schema.RequiredMode.REQUIRED)
     @NotBlank(message = "O campo (nome) não pode ser nulo ou vazio")
-    private String nome;
+    private String name;
 
     @Schema(example = "12345678",
             requiredMode = Schema.RequiredMode.REQUIRED)
     @Length(min = 8, max = 100, message = "A senha deve conter entre 8 e 100 caracteres")
-    private String senha;
+    private String password;
 
     @Schema(example = "2000-01-01",
             requiredMode = Schema.RequiredMode.REQUIRED)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Past(message = "O campo (data de nascimento) não pode estar no presente ou futuro")
-    private LocalDate dataNascimento;
+    private LocalDate birthDate;
 }

@@ -13,10 +13,10 @@ public class ModelMapperConfig {
     public ModelMapper modelMapper() {
         var modelMapper = new ModelMapper();
         modelMapper.typeMap(SignUpDTO.class, User.class).addMappings(mapper -> {
-            mapper.map(SignUpDTO::getNome, User::setName);
+            mapper.map(SignUpDTO::getName, User::setName);
             mapper.map(SignUpDTO::getEmail, User::setEmail);
-            mapper.map(SignUpDTO::getDataNascimento, User::setBirthdate);
-            mapper.map(SignUpDTO::getSenha, User::setPassword);
+            mapper.map(SignUpDTO::getBirthdate, User::setBirthdate);
+            mapper.map(SignUpDTO::getPassword, User::setPassword);
         });
 
         modelMapper.typeMap(User.class, UserDetailsDTO.class).addMappings(mapper -> {
