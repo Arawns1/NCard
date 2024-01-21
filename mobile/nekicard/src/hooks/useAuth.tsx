@@ -12,5 +12,14 @@ export function useAuth() {
     return response.data
   }
 
-  return { signIn }
+  const signUp = useMutation({ mutationFn: signUpRequest })
+
+  async function signUpRequest(
+    form: SignUpRequestDTO
+  ): Promise<AuthResponseDTO> {
+    const response = await api.post(`/auth/signUp`, form)
+    return response.data
+  }
+
+  return { signIn, signUp }
 }

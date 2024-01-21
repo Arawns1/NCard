@@ -21,7 +21,10 @@ export default function WelcomeScreen() {
         top={0}
       />
       <VStack space={8} px={4}>
-        <Button text="Criar nova conta" />
+        <Button
+          text="Criar nova conta"
+          onPress={() => navigation.navigate('signUp')}
+        />
         <Button
           variant={'outline'}
           text="Já possuo uma conta"

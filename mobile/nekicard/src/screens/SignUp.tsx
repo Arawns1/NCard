@@ -2,16 +2,27 @@ import Button from '@components/Button'
 import { Input } from '@components/Input'
 import { AntDesign, Fontisto } from '@expo/vector-icons'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Box, Checkbox, HStack, Icon, Text, Toast, VStack } from 'native-base'
+import {
+  Box,
+  Checkbox,
+  HStack,
+  Heading,
+  Icon,
+  Text,
+  Toast,
+  VStack,
+} from 'native-base'
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import * as Yup from 'yup'
 import { LinearGradient } from 'expo-linear-gradient'
 import { Link } from '@react-navigation/native'
 import { useAuth } from '@hooks/useAuth'
+import { api } from '@services/axios'
 import { Title } from '@components/Title'
 
-const SignInSchema = Yup.object({
+const SignUpSchema = Yup.object({
+  name: Yup.string().required('Nome é obrigatório'),
   email: Yup.string()
     .required('E-mail é obrigatório')
     .matches(
@@ -21,20 +32,22 @@ const SignInSchema = Yup.object({
   password: Yup.string().required('Senha é obrigatória'),
 })
 
-export default function Login() {
+export default function SignUp() {
   const { signIn } = useAuth()
   const {
     control,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<SignInRequestDTO>({
-    resolver: yupResolver(SignInSchema),
+  } = useForm<SignUpRequestDTO>({
+    resolver: yupResolver(SignUpSchema),
     defaultValues: {
       email: '',
+      name: '',
       password: '',
+      birthDate: '',
     },
   })
-  async function handleSignIn(form: SignInRequestDTO) {
+  async function handleSignIn(form: SignUpRequestDTO) {
     signIn.mutate(form, {
       onSuccess: () => {
         Toast.show({
@@ -75,7 +88,10 @@ export default function Login() {
           </Link>
         </Box>
 
-        <Title title="Faça seu Login" subtitle="Bem-vindo(a) de volta!" />
+        <Title
+          title="Crie uma conta"
+          subtitle="Preencha com suas informações"
+        />
 
         <VStack id="form" w={'full'} mt={'20'} justifyContent={'center'}>
           <VStack id="inputs" space={'2'}>
