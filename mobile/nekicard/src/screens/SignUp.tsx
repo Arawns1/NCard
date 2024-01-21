@@ -8,9 +8,10 @@ import { useAuth } from '@hooks/useAuth'
 import { Link, useNavigation } from '@react-navigation/native'
 import { AuthNavigatorRoutesProps } from '@routes/auth.routes'
 import { LinearGradient } from 'expo-linear-gradient'
-import { Box, Icon, ScrollView, Toast, VStack } from 'native-base'
+import { Box, Icon, Toast, VStack } from 'native-base'
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import * as Yup from 'yup'
 
 const SignUpSchema = Yup.object({
@@ -73,10 +74,7 @@ export default function SignUp() {
       colors={['rgba(20, 50, 56, 1)', 'rgba(24, 24, 24, 1)']}
       locations={[0.1, 0.35]}
     >
-      <ScrollView
-        _contentContainerStyle={{ paddingBottom: 40 }}
-        showsVerticalScrollIndicator={false}
-      >
+      <KeyboardAwareScrollView>
         <VStack flex={1} px={'2'} pt={16} pb={4} alignItems={'center'}>
           <Box w={'full'} p={0} m={0}>
             <Link to={{ screen: 'welcomeScreen' }}>
@@ -166,7 +164,7 @@ export default function SignUp() {
             onPress={handleSubmit(handleSignUp)}
           />
         </VStack>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </LinearGradient>
   )
 }

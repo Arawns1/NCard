@@ -33,7 +33,7 @@ function App() {
           barStyle="light-content"
         />
         {/* <UserPhoto /> */}
-        {/* <Routes /> */}
+        <Routes />
       </NativeBaseProvider>
     </QueryClientProvider>
   )
