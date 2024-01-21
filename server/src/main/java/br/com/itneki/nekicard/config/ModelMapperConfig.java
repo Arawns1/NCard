@@ -15,7 +15,7 @@ public class ModelMapperConfig {
         modelMapper.typeMap(SignUpDTO.class, User.class).addMappings(mapper -> {
             mapper.map(SignUpDTO::getName, User::setName);
             mapper.map(SignUpDTO::getEmail, User::setEmail);
-            mapper.map(SignUpDTO::getBirthdate, User::setBirthdate);
+            mapper.map(SignUpDTO::getBirthDate, User::setBirthdate);
             mapper.map(SignUpDTO::getPassword, User::setPassword);
         });
 
