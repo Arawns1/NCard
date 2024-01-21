@@ -3,6 +3,10 @@ import { useMutation } from '@tanstack/react-query'
 import { AuthResponseDTO } from '@dtos/AuthResponse'
 import { SignUpRequestDTO } from '@dtos/SignUpRequest'
 import { AppError } from '@utils/AppError'
+import {
+  storageAuthTokenGet,
+  storageAuthTokenSave,
+} from '@storage/storageAuthToken'
 
 export function useAuth() {
   const signIn = useMutation({ mutationFn: signInRequest })
@@ -11,34 +15,19 @@ export function useAuth() {
     form: SignInRequestDTO
   ): Promise<AuthResponseDTO> {
     const response = await api.post(`/auth/signIn`, form)
+    await storageAuthTokenSave(response.data.access_token)
+    const { token } = await storageAuthTokenGet()
     return response.data
   }
 
   const signUp = useMutation({ mutationFn: signUpRequest })
 
-  async function signUpRequest(form: SignUpRequestDTO): Promise<any> {
-    console.log('111')
-    console.log(form)
-    return await api
-      .post(`/auth/signup`, form)
-      .then((response) => response.data)
-      .catch(function (error) {
-        if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          console.log(error.response.data)
-          console.log(error.response.status)
-          console.log(error.response.headers)
-        } else if (error.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the browser
-          // and an instance of http.ClientRequest in node.js
-          throw new AppError(error.request._response)
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log('Error', error.message)
-        }
-      })
+  async function signUpRequest(
+    form: SignUpRequestDTO
+  ): Promise<AuthResponseDTO> {
+    const response = await api.post(`/auth/signup`, form)
+    await storageAuthTokenSave(response.data.access_token)
+    return response.data
   }
 
   return { signIn, signUp }

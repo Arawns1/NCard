@@ -7,9 +7,10 @@ import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import * as Yup from 'yup'
 import { LinearGradient } from 'expo-linear-gradient'
-import { Link } from '@react-navigation/native'
+import { Link, useNavigation } from '@react-navigation/native'
 import { useAuth } from '@hooks/useAuth'
 import { Title } from '@components/Title'
+import { AuthNavigatorRoutesProps } from '@routes/auth.routes'
 
 const SignInSchema = Yup.object({
   email: Yup.string()
@@ -23,6 +24,8 @@ const SignInSchema = Yup.object({
 
 export default function Login() {
   const { signIn } = useAuth()
+  const navigation = useNavigation<AuthNavigatorRoutesProps>()
+
   const {
     control,
     handleSubmit,
@@ -43,6 +46,7 @@ export default function Login() {
           alignItems: 'center',
           backgroundColor: 'green.500',
         })
+        navigation.navigate('userPhoto')
       },
       onError: () => {
         Toast.show({
