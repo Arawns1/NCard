@@ -32,6 +32,8 @@ jobs:
           tags: arawns/neki_card:latest
           build-args: |
                  APP_PROFILE=prod
+                 FRONTEND_URL=${{ secrets.FRONTEND_URL }}
+                 JWT_SECRET=${{ secrets.JWT_SECRET }}
                  DATABASE_HOST=${{ secrets.DATABASE_HOST }}
                  DATABASE_PORT=${{ secrets.DATABASE_PORT }}
                  DATABASE_NAME=${{ secrets.DATABASE_NAME }}

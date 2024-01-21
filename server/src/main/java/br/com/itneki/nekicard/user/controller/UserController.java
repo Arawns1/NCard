@@ -93,7 +93,7 @@ public class UserController {
                     )
             }),
     })
-    public ResponseEntity<Object> findById(@RequestParam("id") UUID userId){
+    public ResponseEntity<Object> findById(@PathVariable("id") UUID userId){
         try{
             return ResponseEntity.ok().body(userService.findById(userId));
         }

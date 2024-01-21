@@ -14,6 +14,22 @@ services:
       - 5433:5432
     networks:
       - dev-network
+  api:
+    image: arawns/neki_card
+    container_name: nekicard-api
+    environment:
+      APP_PROFILE: prod
+      DATABASE_HOST: db
+      DATABASE_PORT: 5432
+      DATABASE_NAME: nekicard
+      DATABASE_USERNAME: nekicard
+      DATABASE_PASSWORD: neki123@
+    ports:
+      - 8081:8080
+    networks:
+      - dev-network
+    depends_on:
+      - db
 
 networks:
   dev-network:
