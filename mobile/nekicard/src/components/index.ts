@@ -1,0 +1,6 @@
+export { default as Button } from './Button'
+export { default as CheckBox } from './Checkbox'
+export { default as Input } from './Input'
+export { default as LinkCarLoadingd } from './Loading'
+export { default as Title } from './Title'
+export { default as UserPhotoSelect } from './UserPhotoSelect'

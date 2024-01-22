@@ -4,8 +4,7 @@ import NfcManager, { NfcTech } from 'react-native-nfc-manager'
 
 // Pre-step, call this before any NFC operations
 NfcManager.start()
-
-export default function NfcScreen() {
+export default function Search() {
   async function readNdef() {
     try {
       // register for the NFC tag with NDEF in it

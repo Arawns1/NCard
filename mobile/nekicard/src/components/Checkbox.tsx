@@ -4,7 +4,7 @@ import {
   Text,
   ICheckboxProps,
   Checkbox as NativeBaseCheckbox,
-} from '@gluestack-ui/themed'
+} from 'native-base'
 
 interface CheckBoxProps extends ICheckboxProps {
   rememberCredentials?: boolean

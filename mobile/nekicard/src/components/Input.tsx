@@ -17,7 +17,7 @@ export interface InputProps extends IInputProps {
   variant?: 'default' | 'password' | 'date'
 }
 
-export const Input = (props: InputProps) => {
+export default function Input(props: InputProps) {
   const { variant = 'default' } = props
 
   switch (variant) {

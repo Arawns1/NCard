@@ -1,6 +1,5 @@
 import Button from '@components/Button'
-import { Input } from '@components/Input'
-import { Title } from '@components/Title'
+import { Input, Title } from '@components/index'
 import { SignUpRequestDTO } from '@dtos/SignUpRequest'
 import { AntDesign, FontAwesome5, Fontisto } from '@expo/vector-icons'
 import { yupResolver } from '@hookform/resolvers/yup'

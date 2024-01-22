@@ -10,8 +10,9 @@ import { NativeBaseProvider, StatusBar } from 'native-base'
 import { DEFAULT_THEME } from './src/themes/themes'
 import { Routes } from '@routes/index'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import UserPhoto from '@screens/UserPhoto'
+import UserPhoto from '@screens/auth/signup/UserPhoto'
 import { UserContextProvider } from './src/contexts/UserContext'
+import CardSelection from '@screens/auth/signup/CardSelection'
 
 function App() {
   const [fontsLoaded] = useFonts({
@@ -34,7 +35,6 @@ function App() {
           barStyle="light-content"
         />
         <UserContextProvider>
-          {/* <UserPhoto /> */}
           <Routes />
         </UserContextProvider>
       </NativeBaseProvider>
