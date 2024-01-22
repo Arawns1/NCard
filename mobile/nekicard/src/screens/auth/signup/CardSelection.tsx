@@ -7,7 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { Link, useNavigation } from '@react-navigation/native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { Box, Icon, Image, VStack } from 'native-base'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Controller, useForm, SubmitHandler } from 'react-hook-form'
 import { Dimensions, View } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
@@ -18,6 +18,13 @@ import * as Yup from 'yup'
 import { storageCardSave } from '@storage/storageCard'
 import { cardTypes } from '@dtos/CardTypes'
 import { AuthNavigatorRoutesProps } from '@routes/stack.routes'
+import {
+  storageAuthTempTokenGet,
+  storageAuthTempTokenRemove,
+  storageAuthTempTokenSave,
+} from '@storage/storageAuthTempToken'
+import { storageAuthTokenSave } from '@storage/storageAuthToken'
+import { UserContext } from '@contexts/UserContext'
 const cardSelectionSchema = Yup.object({
   name: Yup.string().required('Nome é obrigatório'),
 })
@@ -25,6 +32,7 @@ const cardSelectionSchema = Yup.object({
 export default function CardSelection() {
   const [activeSlide, setActiveSlide] = useState(0)
   const navigation = useNavigation<AuthNavigatorRoutesProps>()
+  const { handleSetToken } = useContext(UserContext)
   const {
     control,
     handleSubmit,
@@ -43,7 +51,10 @@ export default function CardSelection() {
       nfcId: '',
     }
     await storageCardSave(JSON.stringify(cardForm))
-    navigation.navigate('menuPrincipal')
+    const { token } = await storageAuthTempTokenGet()
+    handleSetToken(token)
+    await storageAuthTokenSave(token)
+    await storageAuthTempTokenRemove()
   }
 
   return (
@@ -55,14 +66,13 @@ export default function CardSelection() {
       <KeyboardAwareScrollView>
         <VStack flex={1} px={'2'} pt={16} pb={4} alignItems={'center'}>
           <Box w={'full'} p={0} m={0}>
-            <Link to={{ screen: 'welcomeScreen' }}>
-              <Icon
-                as={AntDesign}
-                name="arrowleft"
-                size={'32px'}
-                color="gray.100"
-              />
-            </Link>
+            <Icon
+              onPress={() => navigation.navigate('additionalDetails')}
+              as={AntDesign}
+              name="arrowleft"
+              size={'32px'}
+              color="gray.100"
+            />
           </Box>
 
           <Title

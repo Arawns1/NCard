@@ -9,17 +9,24 @@ import {
 } from '@storage/storageAuthToken'
 import { useContext } from 'react'
 import { UserContext } from '@contexts/UserContext'
+import { storageUserSave } from '@storage/storageUser'
+import {
+  StorageAuthTempTokenProps,
+  storageAuthTempTokenGet,
+  storageAuthTempTokenSave,
+} from '@storage/storageAuthTempToken'
 
 export function useAuth() {
-  const { fetchUserData } = useContext(UserContext)
+  const { handleSetToken, fetchUserData } = useContext(UserContext)
   const signIn = useMutation({ mutationFn: signInRequest })
 
   async function signInRequest(
     form: SignInRequestDTO
   ): Promise<AuthResponseDTO> {
     const response = await api.post(`/auth/signIn`, form)
-    await storageAuthTokenSave(response.data.access_token)
-    await fetchUserData()
+    if (form.rememberCredentials)
+      await storageAuthTokenSave(response.data.access_token)
+    handleSetToken(response.data.access_token)
     return response.data
   }
 
@@ -29,8 +36,8 @@ export function useAuth() {
     form: SignUpRequestDTO
   ): Promise<AuthResponseDTO> {
     const response = await api.post(`/auth/signup`, form)
-    await storageAuthTokenSave(response.data.access_token)
-    await fetchUserData()
+    await storageAuthTempTokenSave({ token: response.data.access_token })
+    const { token } = await storageAuthTempTokenGet()
     return response.data
   }
 

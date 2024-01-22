@@ -10,6 +10,8 @@ import UserPhoto from '@screens/auth/signup/UserPhoto'
 import WelcomeScreen from '@screens/WelcomeScreen'
 import TabRoutes from './app.routes'
 import EditProfile from '@screens/EditProfile'
+import { useContext } from 'react'
+import { UserContext } from '@contexts/UserContext'
 
 type AuthRoutes = {
   welcomeScreen: undefined
@@ -27,6 +29,7 @@ export type AuthNavigatorRoutesProps = NativeStackNavigationProp<AuthRoutes>
 const { Navigator, Screen } = createNativeStackNavigator<AuthRoutes>()
 
 export function StackRoutes() {
+  const { isAuthenticated } = useContext(UserContext)
   return (
     <Navigator
       screenOptions={{
@@ -36,21 +39,27 @@ export function StackRoutes() {
         animation: 'fade_from_bottom',
       }}
     >
-      <Screen name="userPhoto" component={UserPhoto} />
-      <Screen
-        name="editProfile"
-        component={EditProfile}
-        options={{
-          animation: 'slide_from_right',
-        }}
-      />
-
-      <Screen name="cardSelection" component={CardSelection} />
-      <Screen name="welcomeScreen" component={WelcomeScreen} />
-      <Screen name="login" component={Login} />
-      <Screen name="signUp" component={SignUp} />
-      <Screen name="additionalDetails" component={AdditionalDetails} />
-      <Screen name="menuPrincipal" component={TabRoutes} />
+      {isAuthenticated() ? (
+        <>
+          <Screen name="menuPrincipal" component={TabRoutes} />
+          <Screen
+            name="editProfile"
+            component={EditProfile}
+            options={{
+              animation: 'slide_from_right',
+            }}
+          />
+        </>
+      ) : (
+        <>
+          <Screen name="welcomeScreen" component={WelcomeScreen} />
+          <Screen name="login" component={Login} />
+          <Screen name="signUp" component={SignUp} />
+          <Screen name="userPhoto" component={UserPhoto} />
+          <Screen name="additionalDetails" component={AdditionalDetails} />
+          <Screen name="cardSelection" component={CardSelection} />
+        </>
+      )}
     </Navigator>
   )
 }

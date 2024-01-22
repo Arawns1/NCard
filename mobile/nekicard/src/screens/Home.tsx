@@ -6,7 +6,7 @@ import { UserPhotoSelect } from '@components/index'
 import { UserContext } from '@contexts/UserContext'
 import { AntDesign, EvilIcons, Feather } from '@expo/vector-icons'
 import { useUserPhotoSelect } from '@hooks/useUserPhotoSelect'
-import { Link, useNavigation } from '@react-navigation/native'
+import { Link, useFocusEffect, useNavigation } from '@react-navigation/native'
 import { AuthNavigatorRoutesProps } from '@routes/stack.routes'
 import {
   Box,
@@ -19,38 +19,15 @@ import {
   Toast,
   VStack,
 } from 'native-base'
-import { useContext, useState } from 'react'
+import { useCallback, useContext, useEffect, useState } from 'react'
 import { ImageBackground } from 'react-native'
 export default function Home() {
-  const { fetchUserData } = useContext(UserContext)
+  const { user, fetchUserData } = useContext(UserContext)
   const navigation = useNavigation<AuthNavigatorRoutesProps>()
-  const { photoMutation } = useUserPhotoSelect()
-  const [userPhotoURL, setUserPhotoURL] = useState<string | undefined>(
-    undefined
-  )
 
-  const handlePhotoSelection = () => {
-    photoMutation.mutate(undefined, {
-      onSuccess: (data) => {
-        setUserPhotoURL(`${data?.photo_URL}?timestamp=${Date.now()}`)
-        fetchUserData()
-        Toast.show({
-          title: 'Foto alterada com sucesso',
-          placement: 'top',
-          alignItems: 'center',
-          backgroundColor: 'green.500',
-        })
-      },
-      onError: (error) => {
-        Toast.show({
-          title: error.message,
-          placement: 'top',
-          alignItems: 'center',
-          backgroundColor: 'red.500',
-        })
-      },
-    })
-  }
+  useEffect(() => {
+    fetchUserData()
+  }, [])
 
   const handleSubmit = () => {
     navigation.navigate('additionalDetails')
@@ -90,28 +67,14 @@ export default function Home() {
             flex={1}
             space={'6'}
           >
-            <VStack id="profileImage" space={'2'} mt={'20'}>
+            <VStack id="profileImage" mt={'20'} space={2}>
+              <UserPhotoSelect size={150} />
               <Center>
-                <UserPhotoSelect
-                  source={
-                    userPhotoURL
-                      ? { uri: `${userPhotoURL}` }
-                      : defaultUserPhotoImg
-                  }
-                  alt="Foto do usuário"
-                  size={150}
-                  isLoading={photoMutation.isPending}
-                />
-                <Text
-                  color={'gray.100'}
-                  fontFamily={'bold'}
-                  fontSize="2xl"
-                  mt={2}
-                >
-                  Gabriel Damico
+                <Text color={'gray.100'} fontFamily={'bold'} fontSize="2xl">
+                  {user.name}
                 </Text>
                 <Text color={'gray.200'} fontFamily={'semibold'} fontSize="md">
-                  Trainee
+                  {user.workFunction ? user.workFunction : 'Funcionário Neki'}
                 </Text>
               </Center>
             </VStack>

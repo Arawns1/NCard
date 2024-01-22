@@ -7,11 +7,15 @@ import { api } from '@services/axios'
 import { UserContext } from '@contexts/UserContext'
 
 export default function useUpdate() {
-  const { user } = useContext(UserContext)
+  const { user, getToken } = useContext(UserContext)
   const update = useMutation({ mutationFn: updateRequest })
 
   async function updateRequest(form: updateUserDTO): Promise<UserProfileDTO> {
-    const response = await api.put(`/user/${user.id}`, form)
+    const response = await api.put(`/user/${user.id}`, form, {
+      headers: {
+        Authorization: 'Bearer ' + (await getToken()),
+      },
+    })
     return response.data
   }
 

@@ -6,6 +6,10 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import useUpdate from '@hooks/useUpdate'
 import { useNavigation } from '@react-navigation/native'
 import { AuthNavigatorRoutesProps } from '@routes/stack.routes'
+import {
+  storageAuthTempTokenGet,
+  storageAuthTempTokenSave,
+} from '@storage/storageAuthTempToken'
 import { LinearGradient } from 'expo-linear-gradient'
 import { Box, Icon, Toast, VStack } from 'native-base'
 import React from 'react'
@@ -61,6 +65,20 @@ export default function AdditionalDetails() {
         })
       },
     })
+    const token = await storageAuthTempTokenGet()
+    await storageAuthTempTokenSave({
+      ...token,
+      addedAdditionalInfo: true,
+    })
+    navigation.navigate('cardSelection')
+  }
+
+  const handleSkip = async () => {
+    const token = await storageAuthTempTokenGet()
+    await storageAuthTempTokenSave({
+      ...token,
+      addedAdditionalInfo: true,
+    })
     navigation.navigate('cardSelection')
   }
 
@@ -74,7 +92,7 @@ export default function AdditionalDetails() {
         <VStack flex={1} px={'2'} pt={16} pb={4} alignItems={'center'}>
           <Box w={'full'} p={0} m={0}>
             <Icon
-              onPress={() => navigation.goBack()}
+              onPress={() => navigation.navigate('userPhoto')}
               as={AntDesign}
               name="arrowleft"
               size={'32px'}
@@ -179,14 +197,15 @@ export default function AdditionalDetails() {
             <Button
               text="Próximo"
               mt={2}
-              isLoading={isSubmitting}
+              isLoading={update.isPending}
               onPress={handleSubmit(handleUpdate)}
             />
             <Button
               text="Deixar para depois"
               variant="outline"
+              isLoading={update.isPending}
               mt={2}
-              onPress={() => navigation.navigate('cardSelection')}
+              onPress={handleSkip}
             />
           </VStack>
         </VStack>
