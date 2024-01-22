@@ -7,8 +7,11 @@ import {
   storageAuthTokenGet,
   storageAuthTokenSave,
 } from '@storage/storageAuthToken'
+import { useContext } from 'react'
+import { UserContext } from '@contexts/UserContext'
 
 export function useAuth() {
+  const { fetchUserData } = useContext(UserContext)
   const signIn = useMutation({ mutationFn: signInRequest })
 
   async function signInRequest(
@@ -16,7 +19,7 @@ export function useAuth() {
   ): Promise<AuthResponseDTO> {
     const response = await api.post(`/auth/signIn`, form)
     await storageAuthTokenSave(response.data.access_token)
-    const { token } = await storageAuthTokenGet()
+    await fetchUserData()
     return response.data
   }
 
@@ -27,6 +30,7 @@ export function useAuth() {
   ): Promise<AuthResponseDTO> {
     const response = await api.post(`/auth/signup`, form)
     await storageAuthTokenSave(response.data.access_token)
+    await fetchUserData()
     return response.data
   }
 

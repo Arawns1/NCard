@@ -40,12 +40,6 @@ export default function Login() {
   async function handleSignIn(form: SignInRequestDTO) {
     signIn.mutate(form, {
       onSuccess: () => {
-        Toast.show({
-          title: 'Logado com sucesso',
-          placement: 'top',
-          alignItems: 'center',
-          backgroundColor: 'green.500',
-        })
         navigation.navigate('userPhoto')
       },
       onError: () => {
@@ -90,7 +84,7 @@ export default function Login() {
                 <Input
                   placeholder="E-mail"
                   textContentType="emailAddress"
-                  keyboardType="email-address"
+                  caretHidden={false}
                   autoCapitalize="none"
                   onChangeText={onChange}
                   value={value}

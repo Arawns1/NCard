@@ -11,6 +11,7 @@ import { DEFAULT_THEME } from './src/themes/themes'
 import { Routes } from '@routes/index'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import UserPhoto from '@screens/UserPhoto'
+import { UserContextProvider } from './src/contexts/UserContext'
 
 function App() {
   const [fontsLoaded] = useFonts({
@@ -32,8 +33,10 @@ function App() {
           backgroundColor="transparent"
           barStyle="light-content"
         />
-        {/* <UserPhoto /> */}
-        <Routes />
+        <UserContextProvider>
+          {/* <UserPhoto /> */}
+          <Routes />
+        </UserContextProvider>
       </NativeBaseProvider>
     </QueryClientProvider>
   )

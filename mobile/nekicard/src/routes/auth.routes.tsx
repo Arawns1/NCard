@@ -2,6 +2,8 @@ import {
   createNativeStackNavigator,
   NativeStackNavigationProp,
 } from '@react-navigation/native-stack'
+import AdditionalDetails from '@screens/AdditionalDetails'
+import CardSelection from '@screens/CardSelection'
 import Login from '@screens/Login'
 import SignUp from '@screens/SignUp'
 import UserPhoto from '@screens/UserPhoto'
@@ -12,6 +14,8 @@ type AuthRoutes = {
   login: undefined
   signUp: undefined
   userPhoto: undefined
+  additionalDetails: undefined
+  cardSelection: undefined
 }
 
 export type AuthNavigatorRoutesProps = NativeStackNavigationProp<AuthRoutes>
@@ -32,6 +36,8 @@ export function AuthRoutes() {
       <Screen name="login" component={Login} />
       <Screen name="signUp" component={SignUp} />
       <Screen name="userPhoto" component={UserPhoto} />
+      <Screen name="additionalDetails" component={AdditionalDetails} />
+      <Screen name="cardSelection" component={CardSelection} />
     </Navigator>
   )
 }

@@ -8,11 +8,11 @@ import { useAuth } from '@hooks/useAuth'
 import { Link, useNavigation } from '@react-navigation/native'
 import { AuthNavigatorRoutesProps } from '@routes/auth.routes'
 import { LinearGradient } from 'expo-linear-gradient'
-import { Box, Icon, Toast, VStack } from 'native-base'
+import { Box, Icon, ScrollView, Toast, VStack } from 'native-base'
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import * as Yup from 'yup'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 const SignUpSchema = Yup.object({
   name: Yup.string().required('Nome é obrigatório'),
@@ -117,6 +117,7 @@ export default function SignUp() {
                   <Input
                     placeholder="E-mail"
                     textContentType="emailAddress"
+                    caretHidden={false}
                     autoCapitalize="none"
                     onChangeText={onChange}
                     value={value}
