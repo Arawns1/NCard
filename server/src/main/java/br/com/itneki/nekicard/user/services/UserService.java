@@ -39,7 +39,7 @@ public class UserService {
         var userFound = userRepository.findById(id)
                                       .orElseThrow(UserNotFoundException::new);
 
-        if (!updateUserDTO.mediaSocialList().isEmpty()) {
+        if (updateUserDTO.mediaSocialList() != null && !updateUserDTO.mediaSocialList().isEmpty()) {
             socialMediaService.save(updateUserDTO.mediaSocialList(), id);
         }
 
