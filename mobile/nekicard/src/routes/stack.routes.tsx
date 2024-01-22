@@ -9,6 +9,7 @@ import SignUp from '@screens/auth/signup/SignUp'
 import UserPhoto from '@screens/auth/signup/UserPhoto'
 import WelcomeScreen from '@screens/WelcomeScreen'
 import TabRoutes from './app.routes'
+import EditProfile from '@screens/EditProfile'
 
 type AuthRoutes = {
   welcomeScreen: undefined
@@ -18,13 +19,14 @@ type AuthRoutes = {
   additionalDetails: undefined
   cardSelection: undefined
   menuPrincipal: undefined
+  editProfile: undefined
 }
 
 export type AuthNavigatorRoutesProps = NativeStackNavigationProp<AuthRoutes>
 
 const { Navigator, Screen } = createNativeStackNavigator<AuthRoutes>()
 
-export function AuthRoutes() {
+export function StackRoutes() {
   return (
     <Navigator
       screenOptions={{
@@ -41,6 +43,13 @@ export function AuthRoutes() {
       <Screen name="userPhoto" component={UserPhoto} />
       <Screen name="additionalDetails" component={AdditionalDetails} />
       <Screen name="menuPrincipal" component={TabRoutes} />
+      <Screen
+        name="editProfile"
+        component={EditProfile}
+        options={{
+          animation: 'slide_from_right',
+        }}
+      />
     </Navigator>
   )
 }

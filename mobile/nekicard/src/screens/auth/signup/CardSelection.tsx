@@ -17,7 +17,7 @@ import { LinkCardDTO } from '@dtos/LinkCard'
 import * as Yup from 'yup'
 import { storageCardSave } from '@storage/storageCard'
 import { cardTypes } from '@dtos/CardTypes'
-import { AuthNavigatorRoutesProps } from '@routes/auth.routes'
+import { AuthNavigatorRoutesProps } from '@routes/stack.routes'
 const cardSelectionSchema = Yup.object({
   name: Yup.string().required('Nome é obrigatório'),
 })

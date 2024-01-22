@@ -9,7 +9,7 @@ import * as Yup from 'yup'
 import { LinearGradient } from 'expo-linear-gradient'
 import { Link, useNavigation } from '@react-navigation/native'
 import { useAuth } from '@hooks/useAuth'
-import { AuthNavigatorRoutesProps } from '@routes/auth.routes'
+import { AuthNavigatorRoutesProps } from '@routes/stack.routes'
 
 const SignInSchema = Yup.object({
   email: Yup.string()

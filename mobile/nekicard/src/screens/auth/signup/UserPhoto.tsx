@@ -9,7 +9,7 @@ import { TouchableOpacity } from 'react-native'
 import defaultUserPhotoImg from '@assets/userPhotoDefault.png'
 import { useContext, useState } from 'react'
 import { UserContext } from '@contexts/UserContext'
-import { AuthNavigatorRoutesProps } from '@routes/auth.routes'
+import { AuthNavigatorRoutesProps } from '@routes/stack.routes'
 
 export default function UserPhoto() {
   const { fetchUserData } = useContext(UserContext)

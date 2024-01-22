@@ -8,6 +8,7 @@ import { Icon } from 'native-base'
 import { Feather } from '@expo/vector-icons'
 import Settings from '@screens/Settings'
 import Search from '@screens/Search'
+import EditProfile from '@screens/EditProfile'
 
 type TabNavigation = {
   home: undefined
@@ -22,6 +23,11 @@ export default function TabRoutes() {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
+        tabBarActiveTintColor: '#4AC3C6',
+        tabBarInactiveTintColor: '#E1E1E6',
+        tabBarStyle: {
+          backgroundColor: '#29292E',
+        },
       }}
     >
       <Tab.Screen
