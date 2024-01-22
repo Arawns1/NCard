@@ -25,7 +25,7 @@ public class JWTProvider {
     }
     public static AuthResponse generateToken(String id, String role) {
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
-        var expires_at = Instant.now().plus(Duration.ofHours(2));
+        var expires_at = Instant.now().plus(Duration.ofHours(6));
         String token = JWT.create()
                           .withIssuer("http://neki-card.com.br")
                           .withSubject(id)

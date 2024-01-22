@@ -5,6 +5,8 @@ import {
   FormControl,
   Icon,
   Pressable,
+  TextArea,
+  ITextAreaProps,
 } from 'native-base'
 import React, { useState } from 'react'
 import DateTimePicker from '@react-native-community/datetimepicker'
@@ -14,10 +16,10 @@ export interface InputProps extends IInputProps {
   errorMessage?: string | null
   leftIcon?: React.ReactNode
   onChange?: (value: any) => void
-  variant?: 'default' | 'password' | 'date'
+  variant?: 'default' | 'password' | 'date' | 'textArea'
 }
 
-export const Input = (props: InputProps) => {
+export default function Input(props: InputProps) {
   const { variant = 'default' } = props
 
   switch (variant) {
@@ -25,6 +27,8 @@ export const Input = (props: InputProps) => {
       return <PasswordInput {...props} />
     case 'date':
       return <DateInput {...props} />
+    case 'textArea':
+      return <TextAreaInput {...props} />
     default:
       return <DefaultInput {...props} />
   }
@@ -191,5 +195,43 @@ export function DateInput({
         />
       )}
     </Pressable>
+  )
+}
+
+export function TextAreaInput({
+  errorMessage = null,
+  isInvalid,
+  leftIcon,
+  onChange,
+  ...rest
+}: InputProps) {
+  const invalid = !!errorMessage || isInvalid
+  return (
+    <FormControl isInvalid={invalid} mb={4} w={'full'}>
+      <TextArea
+        autoCompleteType={'on'}
+        bg={'gray.500'}
+        h={16}
+        borderWidth={0}
+        fontSize={'md'}
+        color="white"
+        fontFamily={'regular'}
+        placeholderTextColor={'gray.300'}
+        aria-label="t1"
+        numberOfLines={4}
+        maxLength={100}
+        w="full"
+        isInvalid={invalid}
+        px={2}
+        _invalid={{ borderWidth: 1, borderColor: 'red.500' }}
+        _focus={{
+          bg: 'gray.400',
+          borderColor: 'blue.500',
+          borderWidth: 1,
+        }}
+        {...rest}
+      />
+      <FormControl.ErrorMessage>{errorMessage}</FormControl.ErrorMessage>
+    </FormControl>
   )
 }

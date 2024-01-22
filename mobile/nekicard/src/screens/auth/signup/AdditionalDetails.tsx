@@ -1,12 +1,11 @@
 import Button from '@components/Button'
-import { Input } from '@components/Input'
-import { Title } from '@components/Title'
+import { Input, Title } from '@components/index'
 import { updateUserDTO } from '@dtos/updateUser'
 import { AntDesign, Feather, FontAwesome5 } from '@expo/vector-icons'
 import { yupResolver } from '@hookform/resolvers/yup'
 import useUpdate from '@hooks/useUpdate'
 import { useNavigation } from '@react-navigation/native'
-import { AuthNavigatorRoutesProps } from '@routes/auth.routes'
+import { AuthNavigatorRoutesProps } from '@routes/stack.routes'
 import { LinearGradient } from 'expo-linear-gradient'
 import { Box, Icon, Toast, VStack } from 'native-base'
 import React from 'react'
@@ -17,7 +16,7 @@ import * as Yup from 'yup'
 const updateUserSchema = Yup.object({
   name: Yup.string(),
   social: Yup.string(),
-  phone: Yup.string(),
+  phone: Yup.string().max(11, 'O telefone deve ter 11 dígitos'),
   workFunction: Yup.string(),
   worktime: Yup.string(),
   locality: Yup.string(),
@@ -45,7 +44,7 @@ export default function AdditionalDetails() {
     update.mutate(form, {
       onSuccess: () => {
         Toast.show({
-          title: 'Cadastrado com sucesso',
+          title: 'Informações adicionadas com sucesso',
           placement: 'top',
           alignItems: 'center',
           backgroundColor: 'green.500',
@@ -116,6 +115,7 @@ export default function AdditionalDetails() {
                     dataDetectorTypes={'phoneNumber'}
                     textContentType="telephoneNumber"
                     keyboardType="phone-pad"
+                    maxLength={11}
                     onChangeText={onChange}
                     value={value}
                     returnKeyType="next"

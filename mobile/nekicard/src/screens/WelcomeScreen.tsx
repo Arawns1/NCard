@@ -2,7 +2,7 @@ import React from 'react'
 import BackgroundImg from '@assets/bg-login.jpg'
 import { Image, VStack } from 'native-base'
 import Button from '@components/Button'
-import { AuthNavigatorRoutesProps } from '@routes/auth.routes'
+import { AuthNavigatorRoutesProps } from '@routes/stack.routes'
 import { useNavigation } from '@react-navigation/native'
 
 export default function WelcomeScreen() {
