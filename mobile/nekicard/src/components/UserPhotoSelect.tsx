@@ -11,10 +11,6 @@ export default function UserPhotoSelect({
   isLoading = false,
   ...rest
 }: UserPhotoProps) {
-  useEffect(() => {
-    'PORRA!'
-  }, [])
-
   if (isLoading) {
     return (
       <Skeleton
