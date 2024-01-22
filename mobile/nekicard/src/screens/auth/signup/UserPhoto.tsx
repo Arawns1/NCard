@@ -12,35 +12,7 @@ import { UserContext } from '@contexts/UserContext'
 import { AuthNavigatorRoutesProps } from '@routes/stack.routes'
 
 export default function UserPhoto() {
-  const { fetchUserData } = useContext(UserContext)
   const navigation = useNavigation<AuthNavigatorRoutesProps>()
-  const { photoMutation } = useUserPhotoSelect()
-  const [userPhotoURL, setUserPhotoURL] = useState<string | undefined>(
-    undefined
-  )
-
-  const handlePhotoSelection = () => {
-    photoMutation.mutate(undefined, {
-      onSuccess: (data) => {
-        setUserPhotoURL(`${data?.photo_URL}?timestamp=${Date.now()}`)
-        fetchUserData()
-        Toast.show({
-          title: 'Foto alterada com sucesso',
-          placement: 'top',
-          alignItems: 'center',
-          backgroundColor: 'green.500',
-        })
-      },
-      onError: (error) => {
-        Toast.show({
-          title: error.message,
-          placement: 'top',
-          alignItems: 'center',
-          backgroundColor: 'red.500',
-        })
-      },
-    })
-  }
 
   const handleSubmit = () => {
     navigation.navigate('additionalDetails')
@@ -69,39 +41,15 @@ export default function UserPhoto() {
           subtitle="Essa será a foto em seu perfil"
         />
 
-        <VStack id="body" w={'full'} justifyContent={'flex-start'} flex={1}>
-          <VStack id="imageInput" space={'2'} mt={'32'} mb={'24'}>
-            <Center>
-              <UserPhotoSelect
-                source={
-                  userPhotoURL
-                    ? { uri: `${userPhotoURL}` }
-                    : defaultUserPhotoImg
-                }
-                alt="Foto do usuário"
-                size={150}
-                isLoading={photoMutation.isPending}
-              />
-              <TouchableOpacity onPress={handlePhotoSelection}>
-                <Text
-                  color={'blue.600'}
-                  fontWeight={'bold'}
-                  fontSize="md"
-                  mt={2}
-                  mb={8}
-                >
-                  Alterar foto
-                </Text>
-              </TouchableOpacity>
-            </Center>
-          </VStack>
-          <Button
-            text="Próximo"
-            variant={!userPhotoURL ? 'disabled' : 'default'}
-            mt={2}
-            onPress={handleSubmit}
-          />
+        <VStack id="body" w={'full'} justifyContent={'flex-start'} py={24}>
+          <UserPhotoSelect size={150} />
         </VStack>
+        <Button
+          text="Próximo"
+          variant={'default'}
+          mt={2}
+          onPress={handleSubmit}
+        />
       </VStack>
     </LinearGradient>
   )

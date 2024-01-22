@@ -1,4 +1,3 @@
-import defaultUserPhotoImg from '@assets/userPhotoDefault.png'
 import ContactCard from '@components/ContactCard'
 import DeitailInfoItem from '@components/DeitailInfoItem'
 import { Button, Input, Title, UserPhotoSelect } from '@components/index'
@@ -67,28 +66,7 @@ export default function EditProfile() {
             flex={1}
             space={'6'}
           >
-            <VStack id="imageInput" space={'2'} mt={'12'}>
-              <Center>
-                <UserPhotoSelect
-                  source={defaultUserPhotoImg}
-                  alt="Foto do usuário"
-                  size={150}
-                  //isLoading={photoMutation.isPending}
-                />
-                <TouchableOpacity onPress={handlePhotoSelection}>
-                  <Text
-                    color={'blue.600'}
-                    fontWeight={'bold'}
-                    fontSize="md"
-                    mt={2}
-                    mb={8}
-                  >
-                    Alterar foto
-                  </Text>
-                </TouchableOpacity>
-              </Center>
-            </VStack>
-
+            <UserPhotoSelect size={150} />
             <VStack id="form" w={'full'} justifyContent={'center'}>
               <VStack id="workInfos" w={'full'} space={3}>
                 <Heading color={'gray.100'} fontFamily={'bold'} fontSize="xl">

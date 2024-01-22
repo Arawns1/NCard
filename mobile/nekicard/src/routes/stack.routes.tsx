@@ -36,6 +36,7 @@ export function StackRoutes() {
         animation: 'fade_from_bottom',
       }}
     >
+      <Screen name="userPhoto" component={UserPhoto} />
       <Screen
         name="editProfile"
         component={EditProfile}
@@ -43,11 +44,11 @@ export function StackRoutes() {
           animation: 'slide_from_right',
         }}
       />
+
       <Screen name="cardSelection" component={CardSelection} />
       <Screen name="welcomeScreen" component={WelcomeScreen} />
       <Screen name="login" component={Login} />
       <Screen name="signUp" component={SignUp} />
-      <Screen name="userPhoto" component={UserPhoto} />
       <Screen name="additionalDetails" component={AdditionalDetails} />
       <Screen name="menuPrincipal" component={TabRoutes} />
     </Navigator>
