@@ -17,7 +17,7 @@ import * as Yup from 'yup'
 const updateUserSchema = Yup.object({
   name: Yup.string(),
   social: Yup.string(),
-  phone: Yup.string(),
+  phone: Yup.string().max(11, 'O telefone deve ter 11 dígitos'),
   workFunction: Yup.string(),
   worktime: Yup.string(),
   locality: Yup.string(),
@@ -45,7 +45,7 @@ export default function AdditionalDetails() {
     update.mutate(form, {
       onSuccess: () => {
         Toast.show({
-          title: 'Cadastrado com sucesso',
+          title: 'Informações adicionadas com sucesso',
           placement: 'top',
           alignItems: 'center',
           backgroundColor: 'green.500',
@@ -116,6 +116,7 @@ export default function AdditionalDetails() {
                     dataDetectorTypes={'phoneNumber'}
                     textContentType="telephoneNumber"
                     keyboardType="phone-pad"
+                    maxLength={11}
                     onChangeText={onChange}
                     value={value}
                     returnKeyType="next"
