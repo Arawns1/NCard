@@ -36,8 +36,10 @@ export function useAuth() {
     form: SignUpRequestDTO
   ): Promise<AuthResponseDTO> {
     const response = await api.post(`/auth/signup`, form)
+    console.warn('>>>>>>>>>TOKEN:')
+    console.warn(response.data.access_token)
     await storageAuthTempTokenSave({ token: response.data.access_token })
-    const { token } = await storageAuthTempTokenGet()
+    fetchUserData()
     return response.data
   }
 

@@ -1,4 +1,6 @@
 import HeaderBgBlue from '@assets/HeaderBgBlue.png'
+import HeaderBgDarkBlue from '@assets/HeaderBgDarkBlue.png'
+import HeaderBgBlack from '@assets/HeaderBgBlack.png'
 import defaultUserPhotoImg from '@assets/userPhotoDefault.png'
 import ContactCard from '@components/ContactCard'
 import DeitailInfoItem from '@components/DeitailInfoItem'
@@ -8,6 +10,7 @@ import { AntDesign, EvilIcons, Feather } from '@expo/vector-icons'
 import { useUserPhotoSelect } from '@hooks/useUserPhotoSelect'
 import { Link, useFocusEffect, useNavigation } from '@react-navigation/native'
 import { AuthNavigatorRoutesProps } from '@routes/stack.routes'
+import { storageCardGet } from '@storage/storageCard'
 import {
   Box,
   Center,
@@ -24,10 +27,26 @@ import { ImageBackground } from 'react-native'
 export default function Home() {
   const { user, fetchUserData } = useContext(UserContext)
   const navigation = useNavigation<AuthNavigatorRoutesProps>()
+  const [headerPhoto, setHeaderPhoto] = useState(HeaderBgBlack)
 
   useEffect(() => {
     fetchUserData()
+    fetchHeaderPhoto()
   }, [])
+
+  const fetchHeaderPhoto = async () => {
+    const { type } = await storageCardGet()
+    switch (type) {
+      case 'DARK_BLUE':
+        setHeaderPhoto(HeaderBgDarkBlue)
+        break
+      case 'BLACK':
+        setHeaderPhoto(HeaderBgBlack)
+        break
+      default:
+        setHeaderPhoto(HeaderBgBlue)
+    }
+  }
 
   const handleSubmit = () => {
     navigation.navigate('additionalDetails')
@@ -39,7 +58,7 @@ export default function Home() {
   return (
     <ScrollView>
       <ImageBackground
-        source={HeaderBgBlue}
+        source={headerPhoto}
         style={{
           width: '100%',
           height: '100%',

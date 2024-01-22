@@ -10,6 +10,7 @@ import {
 } from '@storage/storageAuthToken'
 
 import { ReactNode, createContext, useEffect, useState } from 'react'
+import { JWTBody } from 'expo-jwt/dist/types/jwt'
 
 export type UserContextDataProps = {
   user: UserProfileDTO
@@ -32,27 +33,11 @@ type UserContextProviderProps = {
 export function UserContextProvider({ children }: UserContextProviderProps) {
   const [user, setUser] = useState<UserProfileDTO>({} as UserProfileDTO)
   const [userToken, setUserToken] = useState<string | null>(null)
-
-  // async function fetchUser() {
-  //   const { token } = await storageAuthTokenGet()
-  //   if (token) {
-  //     setUserToken(token)
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   fetchUser()
-  // }, [])
-
-  // useEffect(() => {}, [userToken])
-
-  // useEffect(() => {
-  //   fetchUserData()
-  // }, [])
-
   async function fetchUserData() {
-    // const userResponse = await api.get('/user')
-    // setUser(userResponse.data)
+    const userResponse = await api.get('/user', {
+      headers: { Authorization: `Bearer ${await getToken()}` },
+    })
+    setUser(userResponse.data)
   }
 
   function handleSetToken(token: string) {

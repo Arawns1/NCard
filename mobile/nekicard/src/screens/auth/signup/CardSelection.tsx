@@ -13,7 +13,6 @@ import { Dimensions, View } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Carousel, { Pagination } from 'react-native-snap-carousel'
 import { LinkCardDTO } from '@dtos/LinkCard'
-
 import * as Yup from 'yup'
 import { storageCardSave } from '@storage/storageCard'
 import { cardTypes } from '@dtos/CardTypes'
@@ -50,7 +49,7 @@ export default function CardSelection() {
       name: name,
       nfcId: '',
     }
-    await storageCardSave(JSON.stringify(cardForm))
+    await storageCardSave(cardForm)
     const { token } = await storageAuthTempTokenGet()
     handleSetToken(token)
     await storageAuthTokenSave(token)

@@ -51,8 +51,7 @@ export default function UserPhotoSelect({
 
   const fetchImage = async () => {
     fetchUserData()
-    const res = await api.get('/image/' + user.id)
-    setUserPhotoURL(res.data.photo_URL)
+    setUserPhotoURL(user.profilePhotoUrl)
   }
 
   const handlePhotoSelection = () => {

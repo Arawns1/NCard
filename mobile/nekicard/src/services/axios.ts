@@ -2,16 +2,11 @@ import { AppError } from '@utils/AppError'
 import axios, { AxiosError } from 'axios'
 
 const api = axios.create({
-  baseURL: 'http://192.168.0.106:8082',
+  baseURL: process.env.EXPO_PUBLIC_API_URL,
 })
 
 api.interceptors.request.use(
   async (request) => {
-    // const { token } =
-    // if (token) {
-    //   request.headers.Authorization = `Bearer ${token}`
-    // }
-
     return request
   },
   (error) => {

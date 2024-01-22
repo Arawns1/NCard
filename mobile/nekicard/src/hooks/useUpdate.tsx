@@ -11,6 +11,9 @@ export default function useUpdate() {
   const update = useMutation({ mutationFn: updateRequest })
 
   async function updateRequest(form: updateUserDTO): Promise<UserProfileDTO> {
+    console.log('Received form')
+    console.log(form)
+
     const response = await api.put(`/user/${user.id}`, form, {
       headers: {
         Authorization: 'Bearer ' + (await getToken()),
