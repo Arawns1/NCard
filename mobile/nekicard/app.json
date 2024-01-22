@@ -1,0 +1,9 @@
+{
+  "expo": {
+    "name": "nekicard",
+    "slug": "nekicard",
+    "version": "1.0.0",
+    "userInterfaceStyle": "dark",
+    "assetBundlePatterns": ["**/*"]
+  }
+}

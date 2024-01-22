@@ -25,7 +25,7 @@ services:
       DATABASE_USERNAME: nekicard
       DATABASE_PASSWORD: neki123@
     ports:
-      - 8081:8080
+      - 8082:8080
     networks:
       - dev-network
     depends_on:
