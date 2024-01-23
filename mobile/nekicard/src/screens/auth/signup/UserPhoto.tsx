@@ -1,5 +1,6 @@
 import Button from '@components/Button'
-import { Title, UserPhotoSelect } from '@components/index'
+import Title from '@components/Title'
+import UserPhotoSelect from '@components/UserPhotoSelect'
 import { AntDesign } from '@expo/vector-icons'
 import { useUserPhotoSelect } from '@hooks/useUserPhotoSelect'
 import { Link, RouteProp, useNavigation } from '@react-navigation/native'

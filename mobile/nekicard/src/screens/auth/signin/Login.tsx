@@ -1,5 +1,4 @@
 import Button from '@components/Button'
-import { Input, Title } from '@components/index'
 import { AntDesign, Fontisto } from '@expo/vector-icons'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Box, Checkbox, HStack, Icon, Text, Toast, VStack } from 'native-base'
@@ -10,6 +9,8 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { Link, useNavigation } from '@react-navigation/native'
 import { useAuth } from '@hooks/useAuth'
 import { AuthNavigatorRoutesProps } from '@routes/stack.routes'
+import Input from '@components/Input'
+import Title from '@components/Title'
 
 const SignInSchema = Yup.object({
   email: Yup.string()

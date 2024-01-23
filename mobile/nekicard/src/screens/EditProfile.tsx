@@ -1,4 +1,7 @@
-import { Button, Input, Title, UserPhotoSelect } from '@components/index'
+import Input from '@components/Input'
+import Button from '@components/Button'
+import Title from '@components/Title'
+import UserPhotoSelect from '@components/UserPhotoSelect'
 import { UserContext } from '@contexts/UserContext'
 import { fullUpdateUserDTO } from '@dtos/fullUpdateUserDTO'
 import { AntDesign, Feather, FontAwesome5 } from '@expo/vector-icons'

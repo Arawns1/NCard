@@ -1,5 +1,6 @@
 import Button from '@components/Button'
-import { Input, Title } from '@components/index'
+import Input from '@components/Input'
+import Title from '@components/Title'
 import { updateUserDTO } from '@dtos/updateUser'
 import { AntDesign, Feather, FontAwesome5 } from '@expo/vector-icons'
 import { yupResolver } from '@hookform/resolvers/yup'

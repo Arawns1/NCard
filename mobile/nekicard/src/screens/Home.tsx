@@ -4,7 +4,6 @@ import HeaderBgBlack from '@assets/HeaderBgBlack.png'
 import defaultUserPhotoImg from '@assets/userPhotoDefault.png'
 import ContactCard from '@components/ContactCard'
 import DeitailInfoItem from '@components/DeitailInfoItem'
-import { UserPhotoSelect } from '@components/index'
 import { UserContext } from '@contexts/UserContext'
 import { AntDesign, EvilIcons, Feather } from '@expo/vector-icons'
 import { useUserPhotoSelect } from '@hooks/useUserPhotoSelect'
@@ -24,6 +23,7 @@ import {
 } from 'native-base'
 import { useCallback, useContext, useEffect, useState } from 'react'
 import { ImageBackground } from 'react-native'
+import UserPhotoSelect from '@components/UserPhotoSelect'
 export default function Home() {
   const { user, fetchUserData } = useContext(UserContext)
   const navigation = useNavigation<AuthNavigatorRoutesProps>()
@@ -86,8 +86,8 @@ export default function Home() {
             flex={1}
             space={'6'}
           >
+            <UserPhotoSelect size={150} />
             <VStack id="profileImage" mt={'20'} space={2}>
-              <UserPhotoSelect size={150} />
               <Center>
                 <Text color={'gray.100'} fontFamily={'bold'} fontSize="2xl">
                   {user.name}
