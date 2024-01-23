@@ -2,7 +2,10 @@ import { UserProfileDTO } from '@dtos/UserProfile'
 import { useNavigation } from '@react-navigation/native'
 import { AuthNavigatorRoutesProps } from '@routes/stack.routes'
 import { api } from '@services/axios'
-import { storageAuthTempTokenGet } from '@storage/storageAuthTempToken'
+import {
+  storageAuthTempTokenGet,
+  storageAuthTempTokenRemove,
+} from '@storage/storageAuthTempToken'
 import {
   StorageAuthTokenProps,
   storageAuthTokenGet,
@@ -81,6 +84,7 @@ export function UserContextProvider({ children }: UserContextProviderProps) {
 
   async function logout() {
     setUserToken(null)
+    await storageAuthTempTokenRemove()
     await storageTokenRemove()
   }
 

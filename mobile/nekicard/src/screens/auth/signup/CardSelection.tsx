@@ -54,7 +54,7 @@ export default function CardSelection() {
     await storageCardSave(cardForm)
     const { token } = await storageAuthTempTokenGet()
     handleSetToken(token)
-    await storageAuthTokenSave(token)
+    //await storageAuthTokenSave(token)
     await storageAuthTempTokenRemove()
   }
 

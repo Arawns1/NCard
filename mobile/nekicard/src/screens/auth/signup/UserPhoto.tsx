@@ -18,7 +18,7 @@ import {
 
 export default function UserPhoto() {
   const navigation = useNavigation<AuthNavigatorRoutesProps>()
-
+  const { user } = useContext(UserContext)
   const [isPhotoAdded, setIsPhotoAdded] = useState(false)
 
   const handleSubmit = async () => {
@@ -58,6 +58,7 @@ export default function UserPhoto() {
             editable
             size={150}
             callbackFunction={setIsPhotoAdded}
+            photoUrl={user.profilePhotoUrl}
           />
         </VStack>
         <Button
