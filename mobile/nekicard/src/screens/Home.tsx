@@ -25,14 +25,22 @@ import { useCallback, useContext, useEffect, useState } from 'react'
 import { ImageBackground } from 'react-native'
 import UserPhotoSelect from '@components/UserPhotoSelect'
 export default function Home() {
-  const { user, fetchUserData } = useContext(UserContext)
+  const { user, fetchUserData, getUserPhotoURL } = useContext(UserContext)
   const navigation = useNavigation<AuthNavigatorRoutesProps>()
   const [headerPhoto, setHeaderPhoto] = useState(HeaderBgBlack)
 
   useEffect(() => {
-    fetchUserData()
     fetchHeaderPhoto()
   }, [])
+
+  useEffect(() => {}, [getUserPhotoURL])
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchUserData()
+      return () => null
+    }, [])
+  )
 
   const fetchHeaderPhoto = async () => {
     const { type } = await storageCardGet()
@@ -86,8 +94,8 @@ export default function Home() {
             flex={1}
             space={'6'}
           >
-            <UserPhotoSelect size={150} />
             <VStack id="profileImage" mt={'20'} space={2}>
+              <UserPhotoSelect size={150} />
               <Center>
                 <Text color={'gray.100'} fontFamily={'bold'} fontSize="2xl">
                   {user.name}

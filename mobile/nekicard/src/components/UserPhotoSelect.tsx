@@ -41,25 +41,15 @@ export default function UserPhotoSelect({
     )
   }
 
-  const { user, fetchUserData } = useContext(UserContext)
+  const { user, fetchUserData, handleSetUserPhoto, getUserPhotoURL } =
+    useContext(UserContext)
   const { photoMutation } = useUserPhotoSelect()
-  const [userPhotoURL, setUserPhotoURL] = useState<string | undefined>()
-
-  useEffect(() => {
-    fetchImage()
-  }, [])
-
-  const fetchImage = async () => {
-    fetchUserData()
-    setUserPhotoURL(user.profilePhotoUrl)
-  }
 
   const handlePhotoSelection = () => {
     photoMutation.mutate(undefined, {
       onSuccess: (data) => {
-        setUserPhotoURL(`${data?.photo_URL}?timestamp=${Date.now()}`)
+        handleSetUserPhoto(`${data?.photo_URL}?timestamp=${Date.now()}`)
         if (callbackFunction) callbackFunction(true)
-        fetchUserData()
         Toast.show({
           title: 'Foto alterada com sucesso',
           placement: 'top',
@@ -89,7 +79,9 @@ export default function UserPhotoSelect({
           borderWidth={2}
           borderColor={'gray.400'}
           source={
-            userPhotoURL ? { uri: `${userPhotoURL}` } : defaultUserPhotoImg
+            getUserPhotoURL
+              ? { uri: `${getUserPhotoURL}` }
+              : defaultUserPhotoImg
           }
           alt="Foto do usuário"
         />

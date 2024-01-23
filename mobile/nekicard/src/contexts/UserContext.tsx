@@ -11,7 +11,8 @@ import {
 
 import { ReactNode, createContext, useEffect, useState } from 'react'
 import { JWTBody } from 'expo-jwt/dist/types/jwt'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { set } from 'date-fns'
 
 export type UserContextDataProps = {
   user: UserProfileDTO
@@ -21,6 +22,8 @@ export type UserContextDataProps = {
   getToken: () => Promise<string | StorageAuthTokenProps>
   logout: () => void
   isAuthenticated: () => boolean
+  handleSetUserPhoto: (PhotoUrl: string) => void
+  getUserPhotoURL(): string | undefined
 }
 
 export const UserContext = createContext<UserContextDataProps>(
@@ -34,16 +37,27 @@ type UserContextProviderProps = {
 export function UserContextProvider({ children }: UserContextProviderProps) {
   const [user, setUser] = useState<UserProfileDTO>({} as UserProfileDTO)
   const [userToken, setUserToken] = useState<string | null>(null)
+  const [userPhotoURL, setUserPhotoURL] = useState<string | undefined>()
 
   async function fetchUserData() {
     const userResponse = await api.get('/user', {
       headers: { Authorization: `Bearer ${await getToken()}` },
     })
+    console.error(userResponse.data)
     setUser(userResponse.data)
+    return userResponse.data
   }
 
   function handleSetToken(token: string) {
     setUserToken(token)
+  }
+
+  function handleSetUserPhoto(PhotoUrl: string) {
+    setUserPhotoURL(PhotoUrl)
+  }
+
+  function getUserPhotoURL() {
+    return userPhotoURL ? userPhotoURL : user.profilePhotoUrl
   }
 
   async function getToken() {
@@ -79,6 +93,8 @@ export function UserContextProvider({ children }: UserContextProviderProps) {
         getToken,
         logout,
         isAuthenticated,
+        handleSetUserPhoto,
+        getUserPhotoURL,
       }}
     >
       {children}

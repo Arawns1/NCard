@@ -8,7 +8,7 @@ import { useContext } from 'react'
 import { UserContext } from '@contexts/UserContext'
 import { ImageResponseDTO } from '@dtos/ImageResponse'
 export const useUserPhotoSelect = () => {
-  const { user, getToken } = useContext(UserContext)
+  const { getToken, handleSetUserPhoto } = useContext(UserContext)
 
   const PHOTO_SIZE_LIMIT_MB = 10
   const photoMutation = useMutation({ mutationFn: handleUserPhotoSelect })
@@ -54,6 +54,7 @@ export const useUserPhotoSelect = () => {
             Authorization: 'Bearer ' + (await getToken()),
           },
         })
+
         return data as ImageResponseDTO
       }
     } catch (error) {
