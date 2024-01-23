@@ -12,11 +12,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SaveCardDTO {
-    @Schema(example = "A6:EF:95:F7",
+    @Schema(example = "A6EF95F7",
             requiredMode = Schema.RequiredMode.REQUIRED)
     @NotBlank(message = "O campo (nfcId) não pode ser nulo ou vazio")
-    @Pattern(regexp = "^[0-9A-Fa-f]{2}:[0-9A-Fa-f]{2}:[0-9A-Fa-f]{2}:[0-9A-Fa-f]{2}$",
-             message = "Insira um NFC ID válido")
+
     private String nfcId;
     @Schema(example = "EX.: BLUE, BLACK, DARK_BLUE",
             requiredMode = Schema.RequiredMode.REQUIRED)

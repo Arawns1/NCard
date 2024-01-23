@@ -4,6 +4,7 @@ import br.com.itneki.nekicard.card.domain.Card;
 import br.com.itneki.nekicard.card.dto.SaveCardDTO;
 import br.com.itneki.nekicard.card.services.CardService;
 import br.com.itneki.nekicard.user.domain.User;
+import br.com.itneki.nekicard.user.dto.UserDetailsDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -44,6 +45,27 @@ public class CardController {
     public ResponseEntity<Object> findById(@PathVariable UUID id){
         try{
             return ResponseEntity.ok().body(cardService.findById(id));
+        }
+        catch(Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @SecurityRequirement(name = "jwt_auth")
+    @Operation(summary = "Encontra o usuário pelo ID do cartão nfc",
+            description = "Essa função é responsável por encontrar o usuário com base no nfc do seu carão"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {
+                    @Content(
+                            schema = @Schema(implementation = UserDetailsDTO.class)
+                    )
+            }),
+    })
+    @GetMapping("/nfc/{nfcId}")
+    public ResponseEntity<Object> findByNfcId(@PathVariable("nfcId") String nfcId){
+        try{
+            return ResponseEntity.ok().body(cardService.findByNfcId(nfcId));
         }
         catch(Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());

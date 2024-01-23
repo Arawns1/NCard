@@ -102,6 +102,10 @@ public class UserController {
         }
     }
 
+
+
+
+
     @SecurityRequirement(name = "jwt_auth")
     @Operation(summary = "Atualiza o usuário com base no ID",
             description = "Essa função é responsável por atualizar informações do usuário com base no Id"

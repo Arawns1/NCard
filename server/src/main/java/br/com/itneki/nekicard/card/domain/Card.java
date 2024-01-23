@@ -31,8 +31,6 @@ public class Card {
 
     @Column(name = "CARD_CD_NFC_ID", unique = true)
     @NotBlank(message = "O campo (nfc_id) não pode ser nulo ou vazio")
-    @Pattern(regexp = "^[0-9A-Fa-f]{2}:[0-9A-Fa-f]{2}:[0-9A-Fa-f]{2}:[0-9A-Fa-f]{2}$",
-            message = "Insira um NFC ID válido")
     private String nfcId;
 
     @Column(name = "CARD_TX_TYPE")
@@ -44,9 +42,12 @@ public class Card {
     private String qrCodeURL;
 
     @ManyToOne
-    @JoinColumn(name = "USER_CD_ID")
+    @JoinColumn(name = "USER_CD_ID", insertable = false, updatable = false)
     @JsonIgnore
     private User user;
+
+    @Column(name = "USER_CD_ID")
+    private UUID userId;
 
     public void excluir(){
         this.status = false;

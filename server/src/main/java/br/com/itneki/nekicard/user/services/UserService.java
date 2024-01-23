@@ -1,5 +1,7 @@
 package br.com.itneki.nekicard.user.services;
 
+import br.com.itneki.nekicard.card.domain.Card;
+import br.com.itneki.nekicard.card.repository.CardRepository;
 import br.com.itneki.nekicard.exceptions.UserNotFoundException;
 import br.com.itneki.nekicard.socialmedia.service.SocialMediaService;
 import br.com.itneki.nekicard.user.domain.User;
@@ -11,6 +13,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Service
@@ -34,6 +38,8 @@ public class UserService {
 
         return modelMapper.map(user, UserDetailsDTO.class);
     }
+
+
 
     public User update(UUID id, UpdateUserDTO updateUserDTO) {
         var userFound = userRepository.findById(id)

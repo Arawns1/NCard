@@ -13,6 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Service
@@ -33,6 +34,10 @@ public class CardService {
 
     }
 
+    public Card findByNfcId(String nfcId){
+        return cardRepository.findByNfcId(nfcId).orElseThrow(NoSuchElementException::new);
+    }
+
     public Card save(SaveCardDTO saveCardDTO, UUID userId){
         cardRepository.findByNfcId(saveCardDTO.getNfcId())
                       .ifPresent(cardFound -> {
@@ -46,6 +51,7 @@ public class CardService {
                  .nfcId(saveCardDTO.getNfcId())
                  .type(CardType.valueOf(saveCardDTO.getType()))
                  .user(userFound)
+                 .userId(userId)
                  .qrCodeURL(qrCodeBaseURL+"/user/"+userFound.getId())
                  .build();
              return cardRepository.save(card);
