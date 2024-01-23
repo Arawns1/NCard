@@ -11,6 +11,7 @@ import {
 
 import { ReactNode, createContext, useEffect, useState } from 'react'
 import { JWTBody } from 'expo-jwt/dist/types/jwt'
+import { useQuery } from '@tanstack/react-query'
 
 export type UserContextDataProps = {
   user: UserProfileDTO
@@ -33,6 +34,7 @@ type UserContextProviderProps = {
 export function UserContextProvider({ children }: UserContextProviderProps) {
   const [user, setUser] = useState<UserProfileDTO>({} as UserProfileDTO)
   const [userToken, setUserToken] = useState<string | null>(null)
+
   async function fetchUserData() {
     const userResponse = await api.get('/user', {
       headers: { Authorization: `Bearer ${await getToken()}` },

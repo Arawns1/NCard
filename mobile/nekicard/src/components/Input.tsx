@@ -16,6 +16,7 @@ export interface InputProps extends IInputProps {
   errorMessage?: string | null
   leftIcon?: React.ReactNode
   onChange?: (value: any) => void
+  label?: string
   variant?: 'default' | 'password' | 'date' | 'textArea'
 }
 
@@ -38,11 +39,22 @@ export function DefaultInput({
   errorMessage = null,
   isInvalid,
   leftIcon,
+  label,
   ...rest
 }: InputProps) {
   const invalid = !!errorMessage || isInvalid
   return (
     <FormControl isInvalid={invalid} mb={4} w={'full'}>
+      {label && (
+        <FormControl.Label
+          pb={'1'}
+          m={0}
+          _text={{ color: 'gray.200', fontSize: 'md' }}
+        >
+          {label}
+        </FormControl.Label>
+      )}
+
       <NativeBaseInput
         bg={'gray.500'}
         h={16}
@@ -76,6 +88,7 @@ export function PasswordInput({
   errorMessage = null,
   isInvalid,
   leftIcon,
+  label,
   ...rest
 }: InputProps) {
   const invalid = !!errorMessage || isInvalid
@@ -88,6 +101,11 @@ export function PasswordInput({
 
   return (
     <FormControl isInvalid={invalid} mb={4} w={'full'}>
+      {label && (
+        <FormControl.Label _text={{ color: 'gray.200', fontSize: 'md' }}>
+          {label}
+        </FormControl.Label>
+      )}
       <NativeBaseInput
         bg={'gray.500'}
         h={16}
@@ -136,6 +154,7 @@ export function DateInput({
   errorMessage = null,
   isInvalid,
   leftIcon,
+  label,
   onChange,
   ...rest
 }: InputProps) {
@@ -160,6 +179,11 @@ export function DateInput({
   return (
     <Pressable onPress={() => setShowDatepicker(true)}>
       <FormControl isInvalid={invalid} mb={4} w={'full'}>
+        {label && (
+          <FormControl.Label _text={{ color: 'gray.200', fontSize: 'md' }}>
+            {label}
+          </FormControl.Label>
+        )}
         <NativeBaseInput
           bg={'gray.500'}
           h={16}
@@ -201,6 +225,7 @@ export function DateInput({
 export function TextAreaInput({
   errorMessage = null,
   isInvalid,
+  label,
   leftIcon,
   onChange,
   ...rest
@@ -208,6 +233,11 @@ export function TextAreaInput({
   const invalid = !!errorMessage || isInvalid
   return (
     <FormControl isInvalid={invalid} mb={4} w={'full'}>
+      {label && (
+        <FormControl.Label _text={{ color: 'gray.200', fontSize: 'md' }}>
+          {label}
+        </FormControl.Label>
+      )}
       <TextArea
         autoCompleteType={'on'}
         bg={'gray.500'}
