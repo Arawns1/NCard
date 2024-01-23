@@ -21,6 +21,7 @@ export default function UserPage() {
   useEffect(() => {
     fetchUser()
     fetchHeaderPhoto()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const findLinkedin = user?.socialMediaList?.find(
