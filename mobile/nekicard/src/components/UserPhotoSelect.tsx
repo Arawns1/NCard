@@ -3,6 +3,7 @@ import { UserContext } from '@contexts/UserContext'
 import { useUserPhotoSelect } from '@hooks/useUserPhotoSelect'
 import { useNavigation } from '@react-navigation/native'
 import { AuthNavigatorRoutesProps } from '@routes/stack.routes'
+import { api } from '@services/axios'
 import {
   Center,
   IImageProps,
@@ -12,16 +13,22 @@ import {
   Toast,
   VStack,
 } from 'native-base'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { TouchableOpacity } from 'react-native'
 type UserPhotoProps = IImageProps & {
   size: number
   isLoading?: boolean
+  editable?: boolean
+  photoUrl?: string
+  callbackFunction?: (isPhotoAdded: boolean) => void
 }
 
 export default function UserPhotoSelect({
   size,
   isLoading = false,
+  editable = false,
+  photoUrl,
+  callbackFunction,
   ...rest
 }: UserPhotoProps) {
   if (isLoading) {
@@ -36,16 +43,13 @@ export default function UserPhotoSelect({
     )
   }
 
-  const { fetchUserData } = useContext(UserContext)
+  const { user, fetchUserData } = useContext(UserContext)
   const { photoMutation } = useUserPhotoSelect()
-  const [userPhotoURL, setUserPhotoURL] = useState<string | undefined>(
-    undefined
-  )
 
   const handlePhotoSelection = () => {
     photoMutation.mutate(undefined, {
       onSuccess: (data) => {
-        setUserPhotoURL(`${data?.photo_URL}?timestamp=${Date.now()}`)
+        if (callbackFunction) callbackFunction(true)
         fetchUserData()
         Toast.show({
           title: 'Foto alterada com sucesso',
@@ -75,23 +79,16 @@ export default function UserPhotoSelect({
           {...rest}
           borderWidth={2}
           borderColor={'gray.400'}
-          source={
-            userPhotoURL ? { uri: `${userPhotoURL}` } : defaultUserPhotoImg
-          }
+          source={photoUrl ? { uri: `${photoUrl}` } : defaultUserPhotoImg}
           alt="Foto do usuário"
         />
-
-        <TouchableOpacity onPress={handlePhotoSelection}>
-          <Text
-            color={'blue.600'}
-            fontWeight={'bold'}
-            fontSize="md"
-            mt={2}
-            mb={8}
-          >
-            Alterar foto
-          </Text>
-        </TouchableOpacity>
+        {editable && (
+          <TouchableOpacity onPress={handlePhotoSelection}>
+            <Text color={'blue.600'} fontWeight={'bold'} fontSize="md" mt={2}>
+              Alterar foto
+            </Text>
+          </TouchableOpacity>
+        )}
       </Center>
     </VStack>
   )

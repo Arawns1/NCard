@@ -8,7 +8,7 @@ import { useContext } from 'react'
 import { UserContext } from '@contexts/UserContext'
 import { ImageResponseDTO } from '@dtos/ImageResponse'
 export const useUserPhotoSelect = () => {
-  const { user } = useContext(UserContext)
+  const { user, getToken } = useContext(UserContext)
 
   const PHOTO_SIZE_LIMIT_MB = 10
   const photoMutation = useMutation({ mutationFn: handleUserPhotoSelect })
@@ -40,9 +40,7 @@ export const useUserPhotoSelect = () => {
         const fileExtension = PhotoURI.split('.').pop()
 
         const photoFile = {
-          name: `${user.name}.${fileExtension}`
-            .toLowerCase()
-            .replaceAll(' ', '_'),
+          name: `nekicard.${fileExtension}`.toLowerCase().replaceAll(' ', '_'),
           uri: PhotoURI,
           type: `image/${fileExtension}`,
         } as any
@@ -53,8 +51,10 @@ export const useUserPhotoSelect = () => {
         const { data } = await api.post('/image', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
+            Authorization: 'Bearer ' + (await getToken()),
           },
         })
+
         return data as ImageResponseDTO
       }
     } catch (error) {

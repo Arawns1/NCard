@@ -1,15 +1,16 @@
 import Button from '@components/Button'
-import { Input, Title } from '@components/index'
 import { AntDesign, Fontisto } from '@expo/vector-icons'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Box, Checkbox, HStack, Icon, Text, Toast, VStack } from 'native-base'
-import React from 'react'
+import React, { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import * as Yup from 'yup'
 import { LinearGradient } from 'expo-linear-gradient'
 import { Link, useNavigation } from '@react-navigation/native'
 import { useAuth } from '@hooks/useAuth'
 import { AuthNavigatorRoutesProps } from '@routes/stack.routes'
+import Input from '@components/Input'
+import Title from '@components/Title'
 
 const SignInSchema = Yup.object({
   email: Yup.string()
@@ -19,28 +20,27 @@ const SignInSchema = Yup.object({
       'E-mail deve terminar com "@neki-it.com.br" ou "@neki.com.br"'
     ),
   password: Yup.string().required('Senha é obrigatória'),
+  rememberCredentials: Yup.boolean(),
 })
 
 export default function Login() {
   const { signIn } = useAuth()
-  const navigation = useNavigation<AuthNavigatorRoutesProps>()
 
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<SignInRequestDTO>({
     resolver: yupResolver(SignInSchema),
     defaultValues: {
       email: '',
       password: '',
+      rememberCredentials: false,
     },
   })
   async function handleSignIn(form: SignInRequestDTO) {
     signIn.mutate(form, {
-      onSuccess: () => {
-        navigation.navigate('userPhoto')
-      },
+      onSuccess: () => {},
       onError: () => {
         Toast.show({
           title:
@@ -114,21 +114,29 @@ export default function Login() {
             justifyContent={'space-between'}
           >
             <HStack space={3}>
-              <Checkbox
-                value="test"
-                accessibilityLabel="Remember me checkbox"
-                aria-label="Remember me checkbox"
-                _checked={{
-                  bg: 'gray.600',
-                  borderColor: 'gray.500',
-                  _pressed: {
-                    borderColor: 'gray.600',
-                    bg: 'gray.700',
-                  },
-                }}
-                _icon={{ color: 'blue.500', opacity: 1 }}
-                size={'md'}
+              <Controller
+                control={control}
+                name="rememberCredentials"
+                render={({ field: { onChange, value } }) => (
+                  <Checkbox
+                    value="test"
+                    onChange={onChange}
+                    accessibilityLabel="Remember me checkbox"
+                    aria-label="Remember me checkbox"
+                    _checked={{
+                      bg: 'gray.600',
+                      borderColor: 'gray.500',
+                      _pressed: {
+                        borderColor: 'gray.600',
+                        bg: 'gray.700',
+                      },
+                    }}
+                    _icon={{ color: 'blue.500', opacity: 1 }}
+                    size={'md'}
+                  />
+                )}
               />
+
               <Text color={'gray.200'} fontSize={'md'} fontFamily={'regular'}>
                 Lembrar-me
               </Text>
@@ -142,7 +150,7 @@ export default function Login() {
         <Button
           text="Entrar"
           mt={24}
-          isLoading={isSubmitting}
+          isLoading={signIn.isPending}
           onPress={handleSubmit(handleSignIn)}
         />
       </VStack>

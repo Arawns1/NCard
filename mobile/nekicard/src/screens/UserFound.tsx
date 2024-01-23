@@ -1,16 +1,11 @@
 import HeaderBgBlue from '@assets/HeaderBgBlue.png'
 import HeaderBgDarkBlue from '@assets/HeaderBgDarkBlue.png'
 import HeaderBgBlack from '@assets/HeaderBgBlack.png'
-import defaultUserPhotoImg from '@assets/userPhotoDefault.png'
 import ContactCard from '@components/ContactCard'
 import DeitailInfoItem from '@components/DeitailInfoItem'
-import { UserContext } from '@contexts/UserContext'
-import { AntDesign, EvilIcons, Feather } from '@expo/vector-icons'
-import { useUserPhotoSelect } from '@hooks/useUserPhotoSelect'
-import { Link, useFocusEffect, useNavigation } from '@react-navigation/native'
-import { AuthNavigatorRoutesProps } from '@routes/stack.routes'
-import { storageCardGet } from '@storage/storageCard'
-import * as Linking from 'expo-linking'
+import UserPhotoSelect from '@components/UserPhotoSelect'
+import { UserProfileDTO } from '@dtos/UserProfile'
+import { AntDesign, Feather } from '@expo/vector-icons'
 import {
   Box,
   Center,
@@ -19,41 +14,33 @@ import {
   Icon,
   ScrollView,
   Text,
-  Toast,
   VStack,
 } from 'native-base'
-import { useCallback, useContext, useEffect, useState } from 'react'
-import { ImageBackground } from 'react-native'
-import UserPhotoSelect from '@components/UserPhotoSelect'
-import { sub } from 'date-fns'
-export default function Home() {
+import React, { useContext, useEffect, useState } from 'react'
+import { ImageBackground, Linking } from 'react-native'
+import { api } from '@services/axios'
+import { UserContext } from '@contexts/UserContext'
+import { TagEvent } from 'react-native-nfc-manager'
+import { AuthNavigatorRoutesProps, AuthRoutes } from '@routes/stack.routes'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { useNavigation } from '@react-navigation/native'
+
+type Props = NativeStackScreenProps<AuthRoutes, 'userFound'>
+export default function UserFound({ route }: Props) {
   const FRONTEND_URL = process.env.EXPO_PUBLIC_FRONTEND_URL
-  const { user, fetchUserData } = useContext(UserContext)
-  const navigation = useNavigation<AuthNavigatorRoutesProps>()
+  const { getToken } = useContext(UserContext)
+  const [user, setUser] = useState<UserProfileDTO | null>()
   const [headerPhoto, setHeaderPhoto] = useState(HeaderBgBlack)
-  const findLinkedin = user.socialMediaList?.find(
-    (item) => item.name == 'LINKEDIN'
-  )?.url
-  const findGithub = user.socialMediaList?.find(
-    (item) => item.name == 'GITHUB'
-  )?.url
-  const findFacebook = user.socialMediaList?.find(
-    (item) => item.name == 'FACEBOOK'
-  )?.url
+  const navigation = useNavigation<AuthNavigatorRoutesProps>()
+  const fetchFoundUser = async () => {
+    const response = await api.get(`/user/${route.params?.card?.userId}`, {
+      headers: { Authorization: `Bearer ${await getToken()}` },
+    })
 
-  useEffect(() => {
-    fetchHeaderPhoto()
-  }, [])
-
-  useFocusEffect(
-    useCallback(() => {
-      fetchUserData()
-      return () => null
-    }, [])
-  )
-
+    setUser(response.data)
+  }
   const fetchHeaderPhoto = async () => {
-    const { type } = await storageCardGet()
+    const type = route.params?.card.type || 'BLUE'
     switch (type) {
       case 'DARK_BLUE':
         setHeaderPhoto(HeaderBgDarkBlue)
@@ -66,9 +53,21 @@ export default function Home() {
     }
   }
 
-  const handleEditProfile = () => {
-    navigation.navigate('editProfile')
-  }
+  useEffect(() => {
+    fetchHeaderPhoto()
+    fetchFoundUser()
+  }, [])
+
+  const findLinkedin = user?.socialMediaList?.find(
+    (item) => item.name == 'LINKEDIN'
+  )?.url
+  const findGithub = user?.socialMediaList?.find(
+    (item) => item.name == 'GITHUB'
+  )?.url
+  const findFacebook = user?.socialMediaList?.find(
+    (item) => item.name == 'FACEBOOK'
+  )?.url
+
   return (
     <ScrollView>
       <ImageBackground
@@ -83,13 +82,15 @@ export default function Home() {
         }}
       >
         <VStack flex={1} px={'2'} pt={16} pb={4} alignItems={'center'}>
-          <Box w={'full'} p={0} m={0} alignItems={'flex-end'}>
+          <Box w={'full'} p={0} m={0}>
             <Icon
-              as={EvilIcons}
-              name="pencil"
+              onPress={() => {
+                navigation.navigate('menuPrincipal')
+              }}
+              as={AntDesign}
+              name="arrowleft"
               size={'32px'}
               color="gray.100"
-              onPress={handleEditProfile}
             />
           </Box>
 
@@ -101,18 +102,18 @@ export default function Home() {
             space={'6'}
           >
             <VStack id="profileImage" mt={'20'} space={2}>
-              <UserPhotoSelect size={150} photoUrl={user.profilePhotoUrl} />
+              <UserPhotoSelect size={150} photoUrl={user?.profilePhotoUrl} />
               <Center>
                 <Text color={'gray.100'} fontFamily={'bold'} fontSize="2xl">
-                  {user.name}
+                  {user?.name}
                 </Text>
                 <Text color={'gray.200'} fontFamily={'semibold'} fontSize="md">
-                  {user.workFunction ? user.workFunction : 'Funcionário Neki'}
+                  {user?.workFunction ? user?.workFunction : 'Funcionário Neki'}
                 </Text>
               </Center>
             </VStack>
 
-            {user.description && (
+            {user?.description && (
               <VStack id="about" space={2}>
                 <Heading color={'gray.100'} fontFamily={'bold'} fontSize="xl">
                   Sobre Mim
@@ -136,23 +137,23 @@ export default function Home() {
                 <ContactCard
                   icon={<Icon as={Feather} name="link" />}
                   name="Meu Link"
-                  content={`${FRONTEND_URL}/user/${user.id}`}
+                  content={`${FRONTEND_URL}/user/${user?.id}`}
                   canCopy
                 />
                 <ContactCard
                   icon={<Icon as={Feather} name="mail" />}
                   name="Email"
-                  content={user.email}
+                  content={user?.email}
                   onPress={() => {
-                    Linking.openURL('mailto:' + user.email)
+                    Linking.openURL('mailto:' + user?.email)
                   }}
                 />
                 <ContactCard
                   icon={<Icon as={Feather} name="phone" />}
                   name="Celular"
-                  content={user.phone}
+                  content={user?.phone}
                   onPress={() => {
-                    Linking.openURL('tel:' + user.phone)
+                    Linking.openURL('tel:' + user?.phone)
                   }}
                 />
               </HStack>
@@ -200,23 +201,23 @@ export default function Home() {
               <VStack space={2}>
                 <DeitailInfoItem
                   label="Data de nascimento"
-                  value={user.birthdate}
+                  value={user?.birthdate || 'Não informado'}
                 />
 
-                {user.socialName && (
+                {user?.socialName && (
                   <DeitailInfoItem
                     label="Nome social"
-                    value={user.socialName}
+                    value={user?.socialName}
                   />
                 )}
-                {user.workTime && (
+                {user?.workTime && (
                   <DeitailInfoItem
                     label="Tempo de Neki"
-                    value={user.workTime}
+                    value={user?.workTime}
                   />
                 )}
-                {user.locality && (
-                  <DeitailInfoItem label="Localidade" value={user.locality} />
+                {user?.locality && (
+                  <DeitailInfoItem label="Localidade" value={user?.locality} />
                 )}
               </VStack>
             </VStack>

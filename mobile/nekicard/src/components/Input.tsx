@@ -1,4 +1,4 @@
-import { Ionicons } from '@expo/vector-icons'
+import { AntDesign, Feather, Ionicons } from '@expo/vector-icons'
 import {
   Input as NativeBaseInput,
   IInputProps,
@@ -7,16 +7,19 @@ import {
   Pressable,
   TextArea,
   ITextAreaProps,
+  Toast,
 } from 'native-base'
 import React, { useState } from 'react'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { format, subYears } from 'date-fns'
+import useSocialMedia from '@hooks/useSocialMedia'
 
 export interface InputProps extends IInputProps {
   errorMessage?: string | null
   leftIcon?: React.ReactNode
   onChange?: (value: any) => void
-  variant?: 'default' | 'password' | 'date' | 'textArea'
+  label?: string
+  variant?: 'default' | 'password' | 'date' | 'textArea' | 'socialMedia'
 }
 
 export default function Input(props: InputProps) {
@@ -29,6 +32,8 @@ export default function Input(props: InputProps) {
       return <DateInput {...props} />
     case 'textArea':
       return <TextAreaInput {...props} />
+    case 'socialMedia':
+      return <SocialMediaInput {...props} />
     default:
       return <DefaultInput {...props} />
   }
@@ -38,11 +43,22 @@ export function DefaultInput({
   errorMessage = null,
   isInvalid,
   leftIcon,
+  label,
   ...rest
 }: InputProps) {
   const invalid = !!errorMessage || isInvalid
   return (
     <FormControl isInvalid={invalid} mb={4} w={'full'}>
+      {label && (
+        <FormControl.Label
+          pb={'1'}
+          m={0}
+          _text={{ color: 'gray.200', fontSize: 'md' }}
+        >
+          {label}
+        </FormControl.Label>
+      )}
+
       <NativeBaseInput
         bg={'gray.500'}
         h={16}
@@ -76,6 +92,7 @@ export function PasswordInput({
   errorMessage = null,
   isInvalid,
   leftIcon,
+  label,
   ...rest
 }: InputProps) {
   const invalid = !!errorMessage || isInvalid
@@ -88,6 +105,11 @@ export function PasswordInput({
 
   return (
     <FormControl isInvalid={invalid} mb={4} w={'full'}>
+      {label && (
+        <FormControl.Label _text={{ color: 'gray.200', fontSize: 'md' }}>
+          {label}
+        </FormControl.Label>
+      )}
       <NativeBaseInput
         bg={'gray.500'}
         h={16}
@@ -136,6 +158,7 @@ export function DateInput({
   errorMessage = null,
   isInvalid,
   leftIcon,
+  label,
   onChange,
   ...rest
 }: InputProps) {
@@ -160,6 +183,11 @@ export function DateInput({
   return (
     <Pressable onPress={() => setShowDatepicker(true)}>
       <FormControl isInvalid={invalid} mb={4} w={'full'}>
+        {label && (
+          <FormControl.Label _text={{ color: 'gray.200', fontSize: 'md' }}>
+            {label}
+          </FormControl.Label>
+        )}
         <NativeBaseInput
           bg={'gray.500'}
           h={16}
@@ -201,6 +229,7 @@ export function DateInput({
 export function TextAreaInput({
   errorMessage = null,
   isInvalid,
+  label,
   leftIcon,
   onChange,
   ...rest
@@ -208,6 +237,11 @@ export function TextAreaInput({
   const invalid = !!errorMessage || isInvalid
   return (
     <FormControl isInvalid={invalid} mb={4} w={'full'}>
+      {label && (
+        <FormControl.Label _text={{ color: 'gray.200', fontSize: 'md' }}>
+          {label}
+        </FormControl.Label>
+      )}
       <TextArea
         autoCompleteType={'on'}
         bg={'gray.500'}
@@ -229,6 +263,86 @@ export function TextAreaInput({
           borderColor: 'blue.500',
           borderWidth: 1,
         }}
+        {...rest}
+      />
+      <FormControl.ErrorMessage>{errorMessage}</FormControl.ErrorMessage>
+    </FormControl>
+  )
+}
+
+export function SocialMediaInput({
+  errorMessage = null,
+  isInvalid,
+  leftIcon,
+  label,
+  id,
+  ...rest
+}: InputProps) {
+  const invalid = !!errorMessage || isInvalid
+  const [isReadOnly, setIsReadOnly] = useState(!!rest.value)
+  const { removeSocialMedia } = useSocialMedia()
+
+  const handleRemoveSocialMedia = async () => {
+    if (id) {
+      const response = await removeSocialMedia(id)
+      if (response.status === 204) {
+        setIsReadOnly(false)
+        return Toast.show({ title: 'Rede social removida com sucesso' })
+      }
+    }
+    return Toast.show({ title: 'Erro ao remover rede social' })
+  }
+
+  return (
+    <FormControl isInvalid={invalid} mb={4} w={'full'}>
+      {label && (
+        <FormControl.Label
+          pb={'1'}
+          m={0}
+          _text={{ color: 'gray.200', fontSize: 'md' }}
+        >
+          {label}
+        </FormControl.Label>
+      )}
+
+      <NativeBaseInput
+        bg={'gray.500'}
+        h={16}
+        px={1}
+        borderWidth={0}
+        fontSize={'md'}
+        caretHidden={false}
+        color="white"
+        fontFamily={'regular'}
+        placeholderTextColor={'gray.300'}
+        isInvalid={invalid}
+        isReadOnly={isReadOnly}
+        _invalid={{ borderWidth: 1, borderColor: 'red.500' }}
+        _readOnly={{ color: 'gray.200' }}
+        _focus={{
+          bg: 'gray.400',
+          borderColor: 'blue.500',
+          borderWidth: 1,
+        }}
+        InputLeftElement={
+          leftIcon ? (
+            <Icon size="24px" ml={2} mr={1} color="gray.100" as={leftIcon} />
+          ) : undefined
+        }
+        InputRightElement={
+          isReadOnly ? (
+            <Icon
+              id="trashIcon"
+              size="24px"
+              ml={1}
+              mr={2}
+              color="red.500"
+              opacity={1}
+              as={<Icon as={Feather} name="trash" />}
+              onPress={handleRemoveSocialMedia}
+            />
+          ) : undefined
+        }
         {...rest}
       />
       <FormControl.ErrorMessage>{errorMessage}</FormControl.ErrorMessage>

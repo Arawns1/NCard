@@ -1,8 +1,9 @@
 import Button from '@components/Button'
-import { Title, UserPhotoSelect } from '@components/index'
+import Title from '@components/Title'
+import UserPhotoSelect from '@components/UserPhotoSelect'
 import { AntDesign } from '@expo/vector-icons'
 import { useUserPhotoSelect } from '@hooks/useUserPhotoSelect'
-import { Link, useNavigation } from '@react-navigation/native'
+import { Link, RouteProp, useNavigation } from '@react-navigation/native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { Box, Center, Icon, Text, Toast, VStack } from 'native-base'
 import { TouchableOpacity } from 'react-native'
@@ -10,11 +11,22 @@ import defaultUserPhotoImg from '@assets/userPhotoDefault.png'
 import { useContext, useState } from 'react'
 import { UserContext } from '@contexts/UserContext'
 import { AuthNavigatorRoutesProps } from '@routes/stack.routes'
+import {
+  storageAuthTempTokenGet,
+  storageAuthTempTokenSave,
+} from '@storage/storageAuthTempToken'
 
 export default function UserPhoto() {
   const navigation = useNavigation<AuthNavigatorRoutesProps>()
+  const { user } = useContext(UserContext)
+  const [isPhotoAdded, setIsPhotoAdded] = useState(false)
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    const token = await storageAuthTempTokenGet()
+    await storageAuthTempTokenSave({
+      ...token,
+      addedPhoto: true,
+    })
     navigation.navigate('additionalDetails')
   }
 
@@ -42,11 +54,16 @@ export default function UserPhoto() {
         />
 
         <VStack id="body" w={'full'} justifyContent={'flex-start'} py={24}>
-          <UserPhotoSelect size={150} />
+          <UserPhotoSelect
+            editable
+            size={150}
+            callbackFunction={setIsPhotoAdded}
+            photoUrl={user.profilePhotoUrl}
+          />
         </VStack>
         <Button
           text="Próximo"
-          variant={'default'}
+          variant={isPhotoAdded ? 'default' : 'disabled'}
           mt={2}
           onPress={handleSubmit}
         />

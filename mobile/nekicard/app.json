@@ -4,9 +4,7 @@
     "slug": "nekicard",
     "version": "1.0.0",
     "userInterfaceStyle": "dark",
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "android": {
       "package": "com.arawns.nekicard"
     }

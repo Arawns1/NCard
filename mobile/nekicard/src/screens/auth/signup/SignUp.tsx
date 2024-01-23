@@ -1,5 +1,6 @@
 import Button from '@components/Button'
-import { Input, Title } from '@components/index'
+import Input from '@components/Input'
+import Title from '@components/Title'
 import { SignUpRequestDTO } from '@dtos/SignUpRequest'
 import { AntDesign, FontAwesome5, Fontisto } from '@expo/vector-icons'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -8,10 +9,11 @@ import { Link, useNavigation } from '@react-navigation/native'
 import { AuthNavigatorRoutesProps } from '@routes/stack.routes'
 import { LinearGradient } from 'expo-linear-gradient'
 import { Box, Icon, ScrollView, Toast, VStack } from 'native-base'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import * as Yup from 'yup'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { storageAuthTempTokenGet } from '@storage/storageAuthTempToken'
 
 const SignUpSchema = Yup.object({
   name: Yup.string().required('Nome é obrigatório'),
@@ -30,11 +32,10 @@ const SignUpSchema = Yup.object({
 export default function SignUp() {
   const { signUp } = useAuth()
   const navigation = useNavigation<AuthNavigatorRoutesProps>()
-
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<SignUpRequestDTO>({
     resolver: yupResolver(SignUpSchema),
     defaultValues: {
@@ -160,7 +161,7 @@ export default function SignUp() {
           <Button
             text="Entrar"
             mt={2}
-            isLoading={isSubmitting}
+            isLoading={signUp.isPending}
             onPress={handleSubmit(handleSignUp)}
           />
         </VStack>

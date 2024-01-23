@@ -4,4 +4,5 @@ export interface Card {
   nfcId: string
   type: string
   qrCodeURL: string
+  userId?: string
 }
