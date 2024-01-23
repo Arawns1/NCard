@@ -13,8 +13,12 @@ import EditProfile from '@screens/EditProfile'
 import { useContext } from 'react'
 import { UserContext } from '@contexts/UserContext'
 import LinkCard from '@screens/LinkCard'
+import UserFound from '@screens/UserFound'
+import { TagEvent } from 'react-native-nfc-manager'
+import { UserProfileDTO } from '@dtos/UserProfile'
+import { Card } from '@dtos/Card'
 
-type AuthRoutes = {
+export type AuthRoutes = {
   welcomeScreen: undefined
   login: undefined
   signUp: undefined
@@ -24,6 +28,7 @@ type AuthRoutes = {
   menuPrincipal: undefined
   editProfile: undefined
   linkCard: undefined
+  userFound: { card: Card }
 }
 
 export type AuthNavigatorRoutesProps = NativeStackNavigationProp<AuthRoutes>
@@ -52,6 +57,7 @@ export function StackRoutes() {
             }}
           />
           <Screen name="linkCard" component={LinkCard} />
+          <Screen name="userFound" component={UserFound} />
         </>
       ) : (
         <>
