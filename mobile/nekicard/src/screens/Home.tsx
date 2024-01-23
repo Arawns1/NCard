@@ -30,6 +30,7 @@ export default function Home() {
   const { user, fetchUserData } = useContext(UserContext)
   const navigation = useNavigation<AuthNavigatorRoutesProps>()
   const [headerPhoto, setHeaderPhoto] = useState(HeaderBgBlack)
+  const [userPhotoURL, setUserPhotoURL] = useState<string>()
   const findLinkedin = user.socialMediaList?.find(
     (item) => item.name == 'LINKEDIN'
   )?.url
@@ -100,7 +101,7 @@ export default function Home() {
             space={'6'}
           >
             <VStack id="profileImage" mt={'20'} space={2}>
-              <UserPhotoSelect size={150} />
+              <UserPhotoSelect size={150} photoUrl={user.profilePhotoUrl} />
               <Center>
                 <Text color={'gray.100'} fontFamily={'bold'} fontSize="2xl">
                   {user.name}

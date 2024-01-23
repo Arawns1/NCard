@@ -19,6 +19,7 @@ type UserPhotoProps = IImageProps & {
   size: number
   isLoading?: boolean
   editable?: boolean
+  photoUrl?: string
   callbackFunction?: (isPhotoAdded: boolean) => void
 }
 
@@ -26,6 +27,7 @@ export default function UserPhotoSelect({
   size,
   isLoading = false,
   editable = false,
+  photoUrl,
   callbackFunction,
   ...rest
 }: UserPhotoProps) {
@@ -43,21 +45,10 @@ export default function UserPhotoSelect({
 
   const { user, fetchUserData } = useContext(UserContext)
   const { photoMutation } = useUserPhotoSelect()
-  const [userPhotoURL, setUserPhotoURL] = useState<string | undefined>()
-
-  useEffect(() => {
-    fetchImage()
-  }, [])
-
-  const fetchImage = async () => {
-    fetchUserData()
-    setUserPhotoURL(user.profilePhotoUrl)
-  }
 
   const handlePhotoSelection = () => {
     photoMutation.mutate(undefined, {
       onSuccess: (data) => {
-        setUserPhotoURL(`${data?.photo_URL}?timestamp=${Date.now()}`)
         if (callbackFunction) callbackFunction(true)
         fetchUserData()
         Toast.show({
@@ -88,9 +79,7 @@ export default function UserPhotoSelect({
           {...rest}
           borderWidth={2}
           borderColor={'gray.400'}
-          source={
-            userPhotoURL ? { uri: `${userPhotoURL}` } : defaultUserPhotoImg
-          }
+          source={photoUrl ? { uri: `${photoUrl}` } : defaultUserPhotoImg}
           alt="Foto do usuário"
         />
         {editable && (

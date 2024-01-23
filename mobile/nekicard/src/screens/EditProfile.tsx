@@ -122,7 +122,11 @@ export default function EditProfile() {
               space={'6'}
               mt={2}
             >
-              <UserPhotoSelect size={150} editable />
+              <UserPhotoSelect
+                size={150}
+                editable
+                photoUrl={user.profilePhotoUrl}
+              />
               <VStack id="form" w={'full'} justifyContent={'center'}>
                 <VStack id="workInfos" w={'full'} space={3}>
                   <Heading color={'gray.100'} fontFamily={'bold'} fontSize="xl">

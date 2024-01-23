@@ -42,6 +42,9 @@ export function UserContextProvider({ children }: UserContextProviderProps) {
     const userResponse = await api.get('/user', {
       headers: { Authorization: `Bearer ${await getToken()}` },
     })
+
+    const user: UserProfileDTO = userResponse.data
+    user.profilePhotoUrl = `${user.profilePhotoUrl}?timestamp=${Date.now()}`
     setUser(userResponse.data)
     return userResponse.data
   }
