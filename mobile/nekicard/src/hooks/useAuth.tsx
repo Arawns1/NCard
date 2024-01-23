@@ -1,20 +1,11 @@
-import { api } from '@services/axios'
-import { useMutation } from '@tanstack/react-query'
+import { UserContext } from '@contexts/UserContext'
 import { AuthResponseDTO } from '@dtos/AuthResponse'
 import { SignUpRequestDTO } from '@dtos/SignUpRequest'
-import { AppError } from '@utils/AppError'
-import {
-  storageAuthTokenGet,
-  storageAuthTokenSave,
-} from '@storage/storageAuthToken'
+import { api } from '@services/axios'
+import { storageAuthTempTokenSave } from '@storage/storageAuthTempToken'
+import { storageAuthTokenSave } from '@storage/storageAuthToken'
+import { useMutation } from '@tanstack/react-query'
 import { useContext } from 'react'
-import { UserContext } from '@contexts/UserContext'
-import { storageUserSave } from '@storage/storageUser'
-import {
-  StorageAuthTempTokenProps,
-  storageAuthTempTokenGet,
-  storageAuthTempTokenSave,
-} from '@storage/storageAuthTempToken'
 
 export function useAuth() {
   const { handleSetToken, fetchUserData } = useContext(UserContext)
@@ -36,8 +27,6 @@ export function useAuth() {
     form: SignUpRequestDTO
   ): Promise<AuthResponseDTO> {
     const response = await api.post(`/auth/signup`, form)
-    console.warn('>>>>>>>>>TOKEN:')
-    console.warn(response.data.access_token)
     await storageAuthTempTokenSave({ token: response.data.access_token })
     fetchUserData()
     return response.data

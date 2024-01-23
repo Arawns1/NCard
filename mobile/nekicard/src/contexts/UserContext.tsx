@@ -23,7 +23,6 @@ export type UserContextDataProps = {
   logout: () => void
   isAuthenticated: () => boolean
   handleSetUserPhoto: (PhotoUrl: string) => void
-  getUserPhotoURL(): string | undefined
 }
 
 export const UserContext = createContext<UserContextDataProps>(
@@ -43,7 +42,6 @@ export function UserContextProvider({ children }: UserContextProviderProps) {
     const userResponse = await api.get('/user', {
       headers: { Authorization: `Bearer ${await getToken()}` },
     })
-    console.error(userResponse.data)
     setUser(userResponse.data)
     return userResponse.data
   }
@@ -57,7 +55,7 @@ export function UserContextProvider({ children }: UserContextProviderProps) {
   }
 
   function getUserPhotoURL() {
-    return userPhotoURL ? userPhotoURL : user.profilePhotoUrl
+    return userPhotoURL
   }
 
   async function getToken() {
@@ -94,7 +92,6 @@ export function UserContextProvider({ children }: UserContextProviderProps) {
         logout,
         isAuthenticated,
         handleSetUserPhoto,
-        getUserPhotoURL,
       }}
     >
       {children}

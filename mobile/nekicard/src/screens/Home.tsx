@@ -10,6 +10,7 @@ import { useUserPhotoSelect } from '@hooks/useUserPhotoSelect'
 import { Link, useFocusEffect, useNavigation } from '@react-navigation/native'
 import { AuthNavigatorRoutesProps } from '@routes/stack.routes'
 import { storageCardGet } from '@storage/storageCard'
+import * as Linking from 'expo-linking'
 import {
   Box,
   Center,
@@ -24,16 +25,24 @@ import {
 import { useCallback, useContext, useEffect, useState } from 'react'
 import { ImageBackground } from 'react-native'
 import UserPhotoSelect from '@components/UserPhotoSelect'
+import { sub } from 'date-fns'
 export default function Home() {
-  const { user, fetchUserData, getUserPhotoURL } = useContext(UserContext)
+  const { user, fetchUserData } = useContext(UserContext)
   const navigation = useNavigation<AuthNavigatorRoutesProps>()
   const [headerPhoto, setHeaderPhoto] = useState(HeaderBgBlack)
+  const findLinkedin = user.socialMediaList?.find(
+    (item) => item.name == 'LINKEDIN'
+  )?.url
+  const findGithub = user.socialMediaList?.find(
+    (item) => item.name == 'GITHUB'
+  )?.url
+  const findFacebook = user.socialMediaList?.find(
+    (item) => item.name == 'FACEBOOK'
+  )?.url
 
   useEffect(() => {
     fetchHeaderPhoto()
   }, [])
-
-  useEffect(() => {}, [getUserPhotoURL])
 
   useFocusEffect(
     useCallback(() => {
@@ -54,10 +63,6 @@ export default function Home() {
       default:
         setHeaderPhoto(HeaderBgBlue)
     }
-  }
-
-  const handleSubmit = () => {
-    navigation.navigate('additionalDetails')
   }
 
   const handleEditProfile = () => {
@@ -106,20 +111,21 @@ export default function Home() {
               </Center>
             </VStack>
 
-            <VStack id="about" space={2}>
-              <Heading color={'gray.100'} fontFamily={'bold'} fontSize="xl">
-                Sobre Mim
-              </Heading>
-              <Text
-                color={'gray.200'}
-                fontFamily={'regular'}
-                fontSize={'md'}
-                textAlign={'justify'}
-              >
-                Tenho 20 anos e sou apaixonado por programação desde pequeno.
-                Espero poder contribuir com o desenvolvimento da empresa.
-              </Text>
-            </VStack>
+            {user.description && (
+              <VStack id="about" space={2}>
+                <Heading color={'gray.100'} fontFamily={'bold'} fontSize="xl">
+                  Sobre Mim
+                </Heading>
+                <Text
+                  color={'gray.200'}
+                  fontFamily={'regular'}
+                  fontSize={'md'}
+                  textAlign={'justify'}
+                >
+                  {user.description}
+                </Text>
+              </VStack>
+            )}
 
             <VStack id="contacts" space={3}>
               <Heading color={'gray.100'} fontFamily={'bold'} fontSize="xl">
@@ -129,39 +135,62 @@ export default function Home() {
                 <ContactCard
                   icon={<Icon as={Feather} name="link" />}
                   name="Meu Link"
+                  content={'http://meufrontend.com.br/user/' + user.id}
+                  canCopy
                 />
                 <ContactCard
                   icon={<Icon as={Feather} name="mail" />}
                   name="Email"
+                  content={user.email}
+                  onPress={() => {
+                    Linking.openURL('mailto:' + user.email)
+                  }}
                 />
                 <ContactCard
                   icon={<Icon as={Feather} name="phone" />}
                   name="Celular"
+                  content={user.phone}
+                  onPress={() => {
+                    Linking.openURL('tel:' + user.phone)
+                  }}
                 />
               </HStack>
             </VStack>
-            <VStack id="socialMedias" space={3}>
-              <Heading color={'gray.100'} fontFamily={'bold'} fontSize="xl">
-                Redes Sociais
-              </Heading>
-              <HStack w={'full'} justifyContent={'space-between'}>
-                <ContactCard
-                  isHorizontal
-                  icon={<Icon as={AntDesign} name="github" />}
-                  name="Github"
-                />
-                <ContactCard
-                  isHorizontal
-                  icon={<Icon as={AntDesign} name="linkedin-square" />}
-                  name="Linkedin"
-                />
-                <ContactCard
-                  isHorizontal
-                  icon={<Icon as={AntDesign} name="facebook-square" />}
-                  name="Facebook"
-                />
-              </HStack>
-            </VStack>
+            {findFacebook || findGithub || findLinkedin ? (
+              <VStack id="socialMedias" space={3}>
+                <Heading color={'gray.100'} fontFamily={'bold'} fontSize="xl">
+                  Redes Sociais
+                </Heading>
+                <HStack w={'full'} justifyContent={'flex-start'} space={3}>
+                  {findGithub && (
+                    <ContactCard
+                      isHorizontal
+                      icon={<Icon as={AntDesign} name="github" />}
+                      name="Github"
+                      content={findGithub}
+                    />
+                  )}
+
+                  {findLinkedin && (
+                    <ContactCard
+                      isHorizontal
+                      icon={<Icon as={AntDesign} name="linkedin-square" />}
+                      name="Linkedin"
+                      content={findLinkedin}
+                    />
+                  )}
+
+                  {findFacebook && (
+                    <ContactCard
+                      isHorizontal
+                      icon={<Icon as={AntDesign} name="facebook-square" />}
+                      name="Facebook"
+                      content={findFacebook}
+                    />
+                  )}
+                </HStack>
+              </VStack>
+            ) : null}
 
             <VStack id="details" space={2}>
               <Heading color={'gray.100'} fontFamily={'bold'} fontSize="xl">
@@ -169,15 +198,25 @@ export default function Home() {
               </Heading>
               <VStack space={2}>
                 <DeitailInfoItem
-                  label="Nome completo"
-                  value="Gabriel Damico dos Santos"
-                />
-                <DeitailInfoItem
                   label="Data de nascimento"
-                  value="25/09/2003"
+                  value={user.birthdate}
                 />
-                <DeitailInfoItem label="Tempo de Neki" value="1 ano" />
-                <DeitailInfoItem label="Localidade" value="Petrópolis, RJ" />
+
+                {user.socialName && (
+                  <DeitailInfoItem
+                    label="Nome social"
+                    value={user.socialName}
+                  />
+                )}
+                {user.workTime && (
+                  <DeitailInfoItem
+                    label="Tempo de Neki"
+                    value={user.workTime}
+                  />
+                )}
+                {user.locality && (
+                  <DeitailInfoItem label="Localidade" value={user.locality} />
+                )}
               </VStack>
             </VStack>
           </VStack>

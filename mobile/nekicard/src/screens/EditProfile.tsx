@@ -59,12 +59,12 @@ export default function EditProfile() {
       worktime: user.workTime || '',
       locality: user.locality || '',
       github:
-        user.socialMediaList?.find((item) => (item.name = 'GITHUB'))?.url || '',
+        user.socialMediaList?.find((item) => item.name === 'GITHUB')?.url || '',
       facebook:
-        user.socialMediaList?.find((item) => (item.name = 'FACEBOOK'))?.url ||
+        user.socialMediaList?.find((item) => item.name === 'FACEBOOK')?.url ||
         '',
       linkedin:
-        user.socialMediaList?.find((item) => (item.name = 'LINKEDIN'))?.url ||
+        user.socialMediaList?.find((item) => item.name === 'LINKEDIN')?.url ||
         '',
     },
   })
@@ -222,8 +222,10 @@ export default function EditProfile() {
                     name="github"
                     render={({ field: { onChange, value } }) => (
                       <Input
+                        variant="socialMedia"
                         placeholder="Link para seu github"
                         autoCapitalize="none"
+                        id="github"
                         onChangeText={onChange}
                         value={value}
                         returnKeyType="next"
@@ -237,6 +239,8 @@ export default function EditProfile() {
                     name="facebook"
                     render={({ field: { onChange, value } }) => (
                       <Input
+                        variant="socialMedia"
+                        id="facebook"
                         placeholder="Link para seu facebook"
                         autoCapitalize="none"
                         onChangeText={onChange}
@@ -255,7 +259,9 @@ export default function EditProfile() {
                     render={({ field: { onChange, value } }) => (
                       <Input
                         placeholder="Link para seu linkedin"
+                        id="linkedin"
                         autoCapitalize="none"
+                        variant="socialMedia"
                         onChangeText={onChange}
                         value={value}
                         returnKeyType="next"

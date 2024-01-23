@@ -25,11 +25,6 @@ export default function useUpdate() {
   async function fullUpdateRequest(
     form: fullUpdateUserDTO
   ): Promise<UserProfileDTO> {
-    console.log(form)
-    console.log('Github')
-    console.log(form.github)
-    console.log(form.facebook)
-    console.log(form.linkedin)
     const mediaSocialList: SocialMedia[] = []
 
     if (form.github) {
@@ -44,8 +39,7 @@ export default function useUpdate() {
 
     const formattedForm = { ...form, mediaSocialList }
 
-    console.log(formattedForm)
-    const response = await api.put(`/user/${user.id}`, form, {
+    const response = await api.put(`/user/${user.id}`, formattedForm, {
       headers: {
         Authorization: 'Bearer ' + (await getToken()),
       },
