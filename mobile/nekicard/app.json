@@ -10,9 +10,16 @@
       "resizeMode": "contain",
       "backgroundColor": "#070707"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "android": {
       "package": "com.arawns.nekicard"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "5d9a664f-27a3-4c26-b26b-52af9c7efd29"
+      }
     }
   }
 }
