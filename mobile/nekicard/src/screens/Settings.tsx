@@ -26,6 +26,7 @@ export default function Settings() {
           <MenuItem
             text="Vincular Cartão NFC"
             icon={<Icon as={AntDesign} name={'creditcard'} />}
+            onPress={() => navigation.navigate('linkCard')}
           />
           <MenuItem
             text="Sair"

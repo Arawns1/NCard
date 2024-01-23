@@ -12,6 +12,7 @@ import TabRoutes from './app.routes'
 import EditProfile from '@screens/EditProfile'
 import { useContext } from 'react'
 import { UserContext } from '@contexts/UserContext'
+import LinkCard from '@screens/LinkCard'
 
 type AuthRoutes = {
   welcomeScreen: undefined
@@ -22,6 +23,7 @@ type AuthRoutes = {
   cardSelection: undefined
   menuPrincipal: undefined
   editProfile: undefined
+  linkCard: undefined
 }
 
 export type AuthNavigatorRoutesProps = NativeStackNavigationProp<AuthRoutes>
@@ -49,6 +51,7 @@ export function StackRoutes() {
               animation: 'slide_from_right',
             }}
           />
+          <Screen name="linkCard" component={LinkCard} />
         </>
       ) : (
         <>
