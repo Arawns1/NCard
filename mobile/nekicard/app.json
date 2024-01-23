@@ -4,6 +4,12 @@
     "slug": "nekicard",
     "version": "1.0.0",
     "userInterfaceStyle": "dark",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#070707"
+    },
     "assetBundlePatterns": ["**/*"],
     "android": {
       "package": "com.arawns.nekicard"
