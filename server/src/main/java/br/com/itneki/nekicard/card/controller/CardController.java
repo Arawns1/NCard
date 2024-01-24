@@ -16,6 +16,8 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -81,14 +83,17 @@ public class CardController {
         }
     }
 
-    @Operation(summary = "Apagar cartão",
-            description = "Essa função é responsável por realizar a deleção lógica do cartão"
+    @Operation(summary = "ADMIN | Apagar cartão ",
+            description = "Essa função é responsável por realizar a deleção lógica do cartão",
+            tags = {"4.Admin"}
+
     )
     @ApiResponses({
             @ApiResponse(responseCode = "204"),
     })
     @DeleteMapping("/{id}")
     @Transactional
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Object> delete(@PathVariable UUID id){
         try{
             cardService.delete(id);

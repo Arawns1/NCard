@@ -24,6 +24,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -124,14 +125,16 @@ public class UserController {
         }
     }
     @SecurityRequirement(name = "jwt_auth")
-    @Operation(summary = "Exclusão lógica do usuário",
-            description = "Essa função é responsável realizar a exclusão lógica do usuário"
+    @Operation(summary = "ADMIN |Exclusão lógica do usuário",
+            description = "Essa função é responsável realizar a exclusão lógica do usuário",
+            tags = {"4.Admin"}
     )
     @ApiResponses({
             @ApiResponse(responseCode = "204"),
             @ApiResponse(responseCode = "400"),
     })
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     public ResponseEntity<Object> delete(@PathVariable UUID id){
         try{
