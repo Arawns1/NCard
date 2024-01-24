@@ -15,7 +15,7 @@
 - React
 - React Native
 - Expo
-- Spring Boot
+- Spring Boot (Java 20)
 - Tailwind css
 - Shadcn/ui
 - TypeScript
