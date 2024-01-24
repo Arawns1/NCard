@@ -4,6 +4,10 @@
 ![https://neki-card.onrender.com/swagger-ui/](https://img.shields.io/badge/Render-%46E3B7.svg?style=for-the-badge&logo=render&logoColor=white)
 ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 
+![NFC](https://img.shields.io/badge/NFC-blue)
+![Spring](https://img.shields.io/badge/Spring_Boot-green)
+![Expo](https://img.shields.io/badge/Expo-black)
+![Vite](https://img.shields.io/badge/Vite-purple)
 <p align="center"> Aplicativo e site para comunicação entre funcionários utilzando o NekiCard </p>
 
 # 🛠 Tecnologias Utilizadas
@@ -136,8 +140,14 @@ git clone https://github.com/Arawns1/NekiCard.git
 4. Altere o arquivo .ENV para o url de sua API para ```http://localhost:8082/```
 
 
-5. Rode o projeto
+5. WEB - Rode o projeto. Abrirá em http://localhost:5173/
 ```bash
   npm run dev
 ```
+
+5. MOBILE - Rode o projeto. E necessário rodar com um dispositivo conectado pois utiliza NFC
+   ```
+   npm run android
+   ```
+
 Por padrão o projeto web possui apenas a rota /user/{userId} que busca os dados do usuário
