@@ -8,7 +8,7 @@
 ![Spring](https://img.shields.io/badge/Spring_Boot-green)
 ![Expo](https://img.shields.io/badge/Expo-black)
 ![Vite](https://img.shields.io/badge/Vite-purple)
-<p align="center"> Aplicativo e site para comunicação entre funcionários utilzando o NekiCard </p>
+<p align="center"> Aplicativo e site para comunicação entre funcionários utilzando o NCard </p>
 
 # 🛠 Tecnologias Utilizadas
 
